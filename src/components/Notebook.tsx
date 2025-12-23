@@ -6,11 +6,20 @@ import { ScriptConfig } from '../types';
 interface NotebookProps {
     scriptConfig?: ScriptConfig;
     isScriptMode?: boolean;
+    text: string;
+    setText: (text: string) => void;
 }
 
-const Notebook: React.FC<NotebookProps> = ({ scriptConfig, isScriptMode }) => {
-    const [text, setText] = useState('');
+const Notebook: React.FC<NotebookProps> = ({ scriptConfig, isScriptMode, text, setText }) => {
     const [fontSize, setFontSize] = useState(24);
+    const renderContainerRef = React.useRef<HTMLDivElement>(null);
+
+    // Auto-scroll to right when switching to TTB (Vertical)
+    React.useEffect(() => {
+        if (scriptConfig?.direction === 'ttb' && renderContainerRef.current) {
+            renderContainerRef.current.scrollLeft = renderContainerRef.current.scrollWidth;
+        }
+    }, [scriptConfig?.direction, text]); // Re-run on text change to keep anchored? Maybe just direction switch is safer to avoid fighting user. Added text to keep it anchored if they are typing.
 
     return (
         <div className="h-full flex flex-col bg-slate-950">
@@ -25,18 +34,18 @@ const Notebook: React.FC<NotebookProps> = ({ scriptConfig, isScriptMode }) => {
                         <p className="text-xs text-slate-400">Optical scaling enabled for detailed script inspection.</p>
                     </div>
                 </div>
-                
+
                 <div className="flex items-center gap-4">
                     {/* OPTICAL SCALING CONTROLS */}
                     <div className="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded border border-slate-800 group">
                         <Type size={14} className="text-slate-500" />
-                        <input 
-                            type="range" 
-                            min="12" 
-                            max="128" 
-                            value={fontSize} 
+                        <input
+                            type="range"
+                            min="12"
+                            max="128"
+                            value={fontSize}
                             onChange={(e) => setFontSize(Number(e.target.value))}
-                            className="w-24 h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500" 
+                            className="w-24 h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500"
                         />
                         <span className="text-[10px] font-mono text-slate-500 w-8 text-center">{fontSize}px</span>
                     </div>
@@ -56,7 +65,7 @@ const Notebook: React.FC<NotebookProps> = ({ scriptConfig, isScriptMode }) => {
             <div className="flex-1 flex overflow-hidden">
                 {/* Input Area */}
                 <div className="flex-1 border-r border-slate-800 relative bg-slate-900/30">
-                    <textarea 
+                    <textarea
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                         className="w-full h-full bg-transparent p-6 text-slate-300 font-mono text-base leading-relaxed focus:outline-none resize-none placeholder-slate-800"
@@ -69,14 +78,17 @@ const Notebook: React.FC<NotebookProps> = ({ scriptConfig, isScriptMode }) => {
                 </div>
 
                 {/* Render Area */}
-                <div className="flex-1 bg-[#1a1b26] p-8 overflow-y-auto relative custom-scrollbar">
+                <div
+                    ref={renderContainerRef}
+                    className={`flex-1 bg-[#1a1b26] p-8 relative custom-scrollbar ${scriptConfig?.direction === 'ttb' ? 'overflow-x-auto overflow-y-hidden' : 'overflow-y-auto'}`}
+                >
                     <div className="absolute top-4 right-4 text-[10px] font-bold text-slate-600 uppercase tracking-widest opacity-50">
                         Live Neural-Renderer
                     </div>
                     {isScriptMode && scriptConfig ? (
-                        <div 
-                            className="text-purple-200 leading-loose break-words whitespace-pre-wrap transition-all duration-200"
-                            style={{ fontSize: `${fontSize}px` }}
+                        <div
+                            className={`text-purple-200 leading-loose break-words whitespace-pre-wrap transition-all duration-200 h-full ${scriptConfig.direction === 'rtl' ? 'text-right' : 'text-left'}`}
+                            style={{ fontSize: `${fontSize}px`, direction: scriptConfig.direction === 'rtl' ? 'rtl' : 'ltr' }}
                         >
                             <ConScriptText text={text} scriptConfig={scriptConfig} />
                         </div>

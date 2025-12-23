@@ -240,6 +240,14 @@ const resources: TranslationResources = {
     "settings.open_ai_studio": "Open Google AI Studio",
     "settings.help_is_free": "Is it Free?",
     "settings.help_free_desc": "Yes, using the Gemini API is free for light usage. Refer to Google's documentation for details and pricing tiers.",
+    "whats_new.title": "What's new in v1.0.2",
+    "whats_new.f1_title": "Vertical Writing",
+    "whats_new.f1_desc": "Top-to-bottom support.",
+    "whats_new.f2_title": "RTL Support",
+    "whats_new.f2_desc": "Right-to-Left horizontal writing.",
+    "whats_new.f3_title": "Better Control",
+    "whats_new.f3_desc": "New layout settings in the Dashboard",
+    "whats_new.button": "Got it!",
   },
 };
 

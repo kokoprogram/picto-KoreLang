@@ -66,7 +66,7 @@ const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
                     </div>
 
                     <p className="text-[10px] text-neutral-500 pt-4 uppercase tracking-widest">
-                        v1.1.0_stable • 2025
+                        v1.0.2_stable • 2025
                     </p>
                 </div>
             </div>

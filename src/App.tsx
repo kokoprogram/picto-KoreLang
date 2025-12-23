@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Analytics } from '@vercel/analytics/react';
 import Sidebar from './components/Sidebar';
 import MenuBar from './components/MenuBar';
 import Lexicon from './components/Lexicon';
@@ -16,11 +15,13 @@ import ProjectWizard from './components/ProjectWizard';
 import ConstraintsModal from './components/ConstraintsModal';
 import AboutModal from './components/AboutModal';
 import SettingsModal from './components/SettingsModal';
+import WhatsNewModal from './components/WhatsNewModal';
 import { ViewState, LexiconEntry, SoundChangeRule, ProjectData, AppSettings, MorphologyState, PhonologyConfig, ProjectConstraints, LogEntry, ScriptConfig } from './types';
 import { LanguageProvider, useTranslation, i18n } from './i18n';
 import { PanelLeftOpen, LayoutDashboard, Activity, BookA, Languages, GitBranch, Terminal, FileJson, Feather, BookOpen } from 'lucide-react';
 
 const STORAGE_KEY = 'conlang_studio_autosave';
+const SETTINGS_STORAGE_KEY = 'conlang_studio_settings';
 
 const INITIAL_CONSTRAINTS_TEMPLATE: ProjectConstraints = {
   allowDuplicates: true,
@@ -76,6 +77,7 @@ const AppContent: React.FC = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isConstraintsOpen, setIsConstraintsOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isWhatsNewOpen, setIsWhatsNewOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const [projectSessionId, setProjectSessionId] = useState<number>(Date.now());
@@ -91,11 +93,21 @@ const AppContent: React.FC = () => {
   const [draftEntry, setDraftEntry] = useState<Partial<LexiconEntry> | null>(null);
   const [consoleHistory, setConsoleHistory] = useState<LogEntry[]>([]);
 
-  const [settings, setSettings] = useState<AppSettings>({
-    theme: 'dark',
-    autoSave: true,
-    showLineNumbers: true,
-    enableAI: true
+  const [settings, setSettings] = useState<AppSettings>(() => {
+    const saved = localStorage.getItem(SETTINGS_STORAGE_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed to load settings", e);
+      }
+    }
+    return {
+      theme: 'dark',
+      autoSave: true,
+      showLineNumbers: true,
+      enableAI: true
+    };
   });
 
   const [lexicon, setLexicon] = useState<LexiconEntry[]>([]);
@@ -105,6 +117,7 @@ const AppContent: React.FC = () => {
   const [rules, setRules] = useState<SoundChangeRule[]>([]);
   const [constraints, setConstraints] = useState<ProjectConstraints>(INITIAL_CONSTRAINTS_TEMPLATE);
   const [scriptConfig, setScriptConfig] = useState<ScriptConfig>(INITIAL_SCRIPT_CONFIG);
+  const [notebook, setNotebook] = useState('');
 
   const [genWordState, setGenWordState] = useState({
     generated: [], constraints: '', vibe: '', count: 10
@@ -146,6 +159,10 @@ const AppContent: React.FC = () => {
     root.style.setProperty('--accent', themeData.accent);
   }, [settings.theme, settings.customTheme]);
 
+  useEffect(() => {
+    localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+  }, [settings]);
+
   const loadProjectData = (data: ProjectData) => {
     setProjectSessionId(Date.now());
     if (data.name) setProjectName(data.name);
@@ -161,6 +178,7 @@ const AppContent: React.FC = () => {
     } else {
       setScriptConfig(INITIAL_SCRIPT_CONFIG);
     }
+    setNotebook(data.notebook || "");
     if (data.constraints) setConstraints({ ...INITIAL_CONSTRAINTS_TEMPLATE, ...data.constraints });
   };
 
@@ -170,13 +188,25 @@ const AppContent: React.FC = () => {
       try { loadProjectData(JSON.parse(savedData)); } catch (e) { console.error("Hydration failed", e); }
     }
     setIsLoaded(true);
+
+    // Logic for What's New Panel (v1.0.2)
+    const WHATS_NEW_KEY = 'whats_new_v1.0.2_seen';
+    const hasSeen = sessionStorage.getItem(WHATS_NEW_KEY);
+    if (!hasSeen) {
+      setIsWhatsNewOpen(true);
+    }
   }, []);
+
+  const closeWhatsNew = () => {
+    setIsWhatsNewOpen(false);
+    sessionStorage.setItem('whats_new_v1.0.2_seen', 'true');
+  };
 
   useEffect(() => {
     if (!isLoaded) return;
-    const projectData: ProjectData = { version: "1.0.1", name: projectName, author: projectAuthor, description: projectDescription, lexicon, grammar, morphology, phonology, evolutionRules: rules, constraints, scriptConfig, lastModified: Date.now() };
+    const projectData: ProjectData = { version: "1.0.2", name: projectName, author: projectAuthor, description: projectDescription, lexicon, grammar, morphology, phonology, evolutionRules: rules, constraints, scriptConfig, notebook, lastModified: Date.now() };
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(projectData)); } catch (e) { console.error("Auto-save failed", e); }
-  }, [projectName, projectAuthor, projectDescription, lexicon, grammar, morphology, phonology, rules, constraints, scriptConfig, isLoaded]);
+  }, [projectName, projectAuthor, projectDescription, lexicon, grammar, morphology, phonology, rules, constraints, scriptConfig, notebook, isLoaded]);
 
   const handleWizardSubmit = (data: { name: string; author: string; description: string, constraints?: Partial<ProjectConstraints> }) => {
     if (wizardMode === 'create' && (typeof window !== 'undefined' && confirm(t('wizard.overwrite_confirm')))) {
@@ -194,7 +224,7 @@ const AppContent: React.FC = () => {
     setIsWizardOpen(false);
   };
 
-  const getFullProjectData = (): ProjectData => ({ version: "1.0.1", name: projectName, author: projectAuthor, description: projectDescription, lexicon, grammar, morphology, phonology, evolutionRules: rules, constraints, scriptConfig, lastModified: Date.now() });
+  const getFullProjectData = (): ProjectData => ({ version: "1.0.2", name: projectName, author: projectAuthor, description: projectDescription, lexicon, grammar, morphology, phonology, evolutionRules: rules, constraints, scriptConfig, notebook, lastModified: Date.now() });
 
   const renderView = () => {
     const commonProps = { scriptConfig, isScriptMode };
@@ -206,7 +236,7 @@ const AppContent: React.FC = () => {
       case 'GENEVOLVE': return <GenEvolve entries={lexicon} onUpdateEntries={setLexicon} rules={rules} setRules={setRules} {...commonProps} />;
       case 'CONSOLE': return <ConsoleConfig constraints={constraints} setConstraints={setConstraints} settings={settings} setSettings={setSettings} entries={lexicon} setEntries={setLexicon} history={consoleHistory} setHistory={setConsoleHistory} setProjectName={setProjectName} setProjectDescription={setProjectDescription} setProjectAuthor={setProjectAuthor} setIsSidebarOpen={setIsSidebarOpen} setView={setCurrentView} setJumpToTerm={setJumpToTerm} setDraftEntry={setDraftEntry} author={projectAuthor} {...commonProps} />;
       case 'SCRIPT': return <ScriptEditor scriptConfig={scriptConfig} setScriptConfig={setScriptConfig} constraints={constraints} />;
-      case 'NOTEBOOK': return <Notebook {...commonProps} />;
+      case 'NOTEBOOK': return <Notebook {...commonProps} text={notebook} setText={setNotebook} />;
       case 'SOURCE': return <SourceView data={getFullProjectData()} onApply={(data) => { loadProjectData(data); alert('Project state synced.'); }} />;
       default: return <Dashboard entries={lexicon} projectName={projectName} author={projectAuthor} description={projectDescription} setView={setCurrentView} {...commonProps} />;
     }
@@ -217,7 +247,6 @@ const AppContent: React.FC = () => {
   return (
     <div className="flex flex-col h-screen w-screen bg-[var(--bg-main)] text-[var(--text-1)] font-sans overflow-hidden transition-colors duration-200">
       <MenuBar onNewProject={() => { setWizardMode('create'); setIsWizardOpen(true); }} onSaveProject={() => { if (typeof window !== 'undefined') { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(getFullProjectData(), null, 2)], { type: 'application/json' })); a.download = `${projectName.toLowerCase().replace(/\s/g, '-')}.json`; a.click(); } }} onOpenProject={(file) => { const r = new FileReader(); r.onload = (e) => loadProjectData(JSON.parse(e.target?.result as string)); r.readAsText(file); }} onOpenSettings={() => setIsSettingsOpen(true)} onOpenConstraints={() => setIsConstraintsOpen(true)} onZoomIn={() => setZoomLevel(p => Math.min(p + 10, 150))} onZoomOut={() => setZoomLevel(p => Math.max(p - 10, 50))} onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} settings={settings} isScriptMode={isScriptMode} onToggleScriptMode={() => setIsScriptMode(!isScriptMode)} onOpenAbout={() => setIsAboutOpen(true)} />
-      <Analytics />
       <div className="flex flex-1 overflow-hidden relative">
         {isMobile && isSidebarOpen && <div className="absolute inset-0 bg-black/50 z-30 backdrop-blur-sm" onClick={() => setIsSidebarOpen(false)} />}
         {isSidebarOpen ? (
@@ -236,15 +265,16 @@ const AppContent: React.FC = () => {
       <footer className="h-6 bg-[var(--bg-panel)] border-t border-neutral-700 flex items-center px-4 text-xs text-[var(--text-2)] gap-4 shrink-0 z-50 relative">
         <span className="flex items-center gap-1 text-emerald-500 font-bold"><span className="w-2 h-2 rounded-full bg-emerald-500"></span>Auto-Saved</span>
         <span className="text-neutral-400">{projectName}</span>
-        <span className="text-neutral-500/80 font-mono text-[11px]">v1.0.1</span>
+        <span className="text-neutral-500/80 font-mono text-[11px]">v1.0.2</span>
         <span className="ml-auto">Ln 1, Col 1</span>
         <span>{lexicon.length} Words</span>
         <span>AI: {settings.enableAI ? 'READY' : 'OFF'}</span>
       </footer>
       <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} settings={settings} onUpdateSettings={setSettings} />
-      <ConstraintsModal isOpen={isConstraintsOpen} onClose={() => setIsConstraintsOpen(false)} constraints={constraints} onUpdateConstraints={setConstraints} {...{ scriptConfig, isScriptMode }} />
+      <ConstraintsModal isOpen={isConstraintsOpen} onClose={() => setIsConstraintsOpen(false)} constraints={constraints} onUpdateConstraints={setConstraints} {...{ scriptConfig, isScriptMode }} onUpdateScriptConfig={setScriptConfig} />
       <ProjectWizard isOpen={isWizardOpen} mode={wizardMode} initialData={{ name: wizardMode === 'create' ? '' : projectName, author: wizardMode === 'create' ? '' : projectAuthor, description: wizardMode === 'create' ? '' : projectDescription }} onClose={() => setIsWizardOpen(false)} onSubmit={handleWizardSubmit} />
       <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
+      <WhatsNewModal isOpen={isWhatsNewOpen} onClose={closeWhatsNew} />
     </div>
   );
 };

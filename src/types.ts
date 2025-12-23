@@ -2,9 +2,9 @@
 import React from 'react';
 
 export const POS_SUGGESTIONS = [
-  'Noun', 'Verb', 'Adjective', 'Adverb', 
+  'Noun', 'Verb', 'Adjective', 'Adverb',
   'Pronoun', 'Preposition', 'Conjunction', 'Interjection',
-  'Determiner', 'Numeral', 'Particle', 'Classifier', 
+  'Determiner', 'Numeral', 'Particle', 'Classifier',
   'Affix', 'Clitic', 'Auxiliary', 'Proper Noun'
 ] as const;
 
@@ -26,68 +26,68 @@ export interface LexiconEntry {
   id: string;
   word: string;
   ipa: string;
-  pos: string; 
+  pos: string;
   definition: string;
-  etymology?: string; 
-  derivedFrom?: string; 
+  etymology?: string;
+  derivedFrom?: string;
   notes?: string;
 }
 
 export interface LogEntry {
-    type: 'command' | 'success' | 'error' | 'info' | 'output';
-    content: string;
-    timestamp: string;
-    component?: React.ReactNode; 
+  type: 'command' | 'success' | 'error' | 'info' | 'output';
+  content: string;
+  timestamp: string;
+  component?: React.ReactNode;
 }
 
 export interface GlyphStroke {
-    id: string;
-    type: 'path' | 'rect' | 'circle' | 'line' | 'image';
-    d: string; // Used for paths and lines
-    x?: number; // For rects/circles/images
-    y?: number;
-    width: number;
-    height?: number; // For rects/images
-    radius?: number; // For circles
-    strokeWidth: number;
-    cap: 'round' | 'square';
-    color: string;
-    visible: boolean;
-    locked: boolean;
-    label?: string; // For layer identification
-    imageUrl?: string; // For image layers
-    opacity?: number; // For image layers
+  id: string;
+  type: 'path' | 'rect' | 'circle' | 'line' | 'image';
+  d: string; // Used for paths and lines
+  x?: number; // For rects/circles/images
+  y?: number;
+  width: number;
+  height?: number; // For rects/images
+  radius?: number; // For circles
+  strokeWidth: number;
+  cap: 'round' | 'square';
+  color: string;
+  visible: boolean;
+  locked: boolean;
+  label?: string; // For layer identification
+  imageUrl?: string; // For image layers
+  opacity?: number; // For image layers
 }
 
 export interface ScriptGlyph {
-    char: string; 
-    pua: string; 
-    strokes: GlyphStroke[]; 
-    width?: number; 
-    viewWidth?: number; 
-    imageUrl?: string; // Deprecated but kept for migration compatibility
-    fontOverride?: boolean; 
+  char: string;
+  pua: string;
+  strokes: GlyphStroke[];
+  width?: number;
+  viewWidth?: number;
+  imageUrl?: string; // Deprecated but kept for migration compatibility
+  fontOverride?: boolean;
 }
 
 export interface ScriptConfig {
-    name: string;
-    direction: 'ltr' | 'rtl' | 'ttb';
-    glyphs: ScriptGlyph[];
-    fontFamily?: string; 
-    fontData?: string; 
-    spacingMode?: 'mono' | 'proportional'; 
+  name: string;
+  direction: 'ltr' | 'rtl' | 'ttb';
+  glyphs: ScriptGlyph[];
+  fontFamily?: string;
+  fontData?: string;
+  spacingMode?: 'mono' | 'proportional';
 }
 
 export interface Phoneme {
   symbol: string;
   type: 'consonant' | 'vowel';
-  manner?: string; 
-  place?: string;  
+  manner?: string;
+  place?: string;
   voiced?: boolean;
-  height?: string; 
-  backness?: string; 
+  height?: string;
+  backness?: string;
   rounded?: boolean;
-  description?: string; 
+  description?: string;
 }
 
 export interface PhonologyConfig {
@@ -95,13 +95,13 @@ export interface PhonologyConfig {
   description: string;
   consonants: Phoneme[];
   vowels: Phoneme[];
-  syllableStructure: string; 
+  syllableStructure: string;
   bannedCombinations: string[];
 }
 
 export interface SoundChangeRule {
   id: string;
-  rule: string; 
+  rule: string;
   description: string;
 }
 
@@ -112,53 +112,53 @@ export interface MorphologyState {
 
 export interface MorphDimension {
   id: string;
-  name: string; 
-  values: string[]; 
+  name: string;
+  values: string[];
 }
 
 export interface InflectionRule {
-  coordinates: Record<string, string>; 
-  affix: string; 
+  coordinates: Record<string, string>;
+  affix: string;
   isPrefix: boolean;
   logic?: {
-      pos?: string; 
-      regex?: string; 
+    pos?: string;
+    regex?: string;
   };
 }
 
 export interface MorphParadigm {
   id: string;
-  name: string; 
-  pos: string; 
-  dimensions: string[]; 
+  name: string;
+  pos: string;
+  dimensions: string[];
   rules: InflectionRule[];
 }
 
 export interface ConstraintRule {
-    target: string; 
-    conditionPos?: string; 
+  target: string;
+  conditionPos?: string;
 }
 
 export interface ProjectConstraints {
-    allowDuplicates: boolean;
-    caseSensitive: boolean;
-    bannedSequences: string[]; 
-    allowedGraphemes: string; 
-    phonotacticStructure: string; 
-    mustStartWith: ConstraintRule[]; 
-    mustEndWith: ConstraintRule[];   
-    customSortingOrder?: string; 
-    sortingLocale?: string; 
+  allowDuplicates: boolean;
+  caseSensitive: boolean;
+  bannedSequences: string[];
+  allowedGraphemes: string;
+  phonotacticStructure: string;
+  mustStartWith: ConstraintRule[];
+  mustEndWith: ConstraintRule[];
+  customSortingOrder?: string;
+  sortingLocale?: string;
 }
 
 export type ViewState = 'DASHBOARD' | 'LEXICON' | 'GRAMMAR' | 'PHONOLOGY' | 'GENEVOLVE' | 'CONSOLE' | 'SOURCE' | 'SCRIPT' | 'NOTEBOOK';
 
 export interface CustomTheme {
-    bgMain: string;
-    bgPanel: string;
-    text1: string;
-    text2: string;
-    accent: string;
+  bgMain: string;
+  bgPanel: string;
+  text1: string;
+  text2: string;
+  accent: string;
 }
 
 export interface AppSettings {
@@ -166,7 +166,7 @@ export interface AppSettings {
   customTheme?: CustomTheme;
   autoSave: boolean;
   showLineNumbers: boolean;
-  enableAI: boolean; 
+  enableAI: boolean;
 }
 
 export interface ProjectData {
@@ -176,10 +176,11 @@ export interface ProjectData {
   description: string;
   lexicon: LexiconEntry[];
   grammar: string;
-  phonology?: PhonologyConfig; 
-  morphology: MorphologyState; 
+  phonology?: PhonologyConfig;
+  morphology: MorphologyState;
   evolutionRules: SoundChangeRule[];
-  constraints: ProjectConstraints; 
-  scriptConfig?: ScriptConfig; 
+  constraints: ProjectConstraints;
+  scriptConfig?: ScriptConfig;
+  notebook?: string;
   lastModified: number;
 }

@@ -1,10 +1,34 @@
 import React, { useState, useRef } from 'react';
 import {
   FileText, FolderOpen, Settings,
-  Download, HelpCircle, Command, ShieldCheck, Feather
+  Download, HelpCircle, Command, ShieldCheck, Feather, LucideIcon
 } from 'lucide-react';
 import { AppSettings } from '../types';
 import { useTranslation } from '../i18n';
+
+interface MenuItem {
+  label: string;
+  icon?: LucideIcon;
+  action: () => void;
+  shortcut?: string;
+  type?: never;
+}
+
+interface MenuSeparator {
+  type: 'separator';
+  label?: never;
+  icon?: never;
+  action?: never;
+  shortcut?: never;
+}
+
+type MenuEntry = MenuItem | MenuSeparator;
+
+interface MenuGroup {
+  id: string;
+  label: string;
+  items: MenuEntry[];
+}
 
 interface MenuBarProps {
   onNewProject: () => void;
@@ -48,7 +72,7 @@ const MenuBar: React.FC<MenuBarProps> = ({
     setActiveMenu(null);
   };
 
-  const menuItems = [
+  const menuItems: MenuGroup[] = [
     {
       id: 'file',
       label: t('menu.file'),
@@ -153,7 +177,7 @@ const MenuBar: React.FC<MenuBarProps> = ({
                         key={idx}
                         className="w-full text-left px-4 py-1.5 text-sm text-neutral-300 hover:bg-blue-600 hover:text-white flex items-center justify-between group"
                         onClick={() => {
-                          item.action?.();
+                          item.action();
                           setActiveMenu(null);
                         }}
                       >
