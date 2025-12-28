@@ -22,8 +22,8 @@ export const Section: React.FC<SectionProps> = ({
 }) => {
   return (
     <div className={className}>
-      <div className="flex items-center gap-2 mb-4">
-        {icon && <div style={{ color: 'var(--accent)' }}>{icon}</div>}
+      <div className="flex items-start gap-2 mb-4">
+        {icon && <div className="pt-0.5" style={{ color: 'var(--accent)' }}>{icon}</div>}
         <div>
           <h3 
             className="text-sm font-bold tracking-wider uppercase"

@@ -308,8 +308,8 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({ scriptConfig, setScriptConf
     return (
         <ViewLayout
             icon={Feather}
-            title="Neural-Glyph Studio v4.6"
-            subtitle="Professional Layer Engine"
+            title={t('script.title')}
+            subtitle={t('script.engine_subtitle')}
             headerChildren={
                 <div className="flex gap-4 items-center text-slate-200">
                     <div className="flex gap-1 bg-neutral-900 border border-neutral-800 rounded p-1">
@@ -319,9 +319,9 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({ scriptConfig, setScriptConf
                                 scriptConfig.spacingMode === 'proportional' ? 'shadow' : ''
                             }`}
                             style={scriptConfig.spacingMode === 'proportional' ? { backgroundColor: 'var(--accent)', color: 'var(--text-primary)' } : { color: 'var(--text-secondary)' }}
-                            title="Proportional Spacing (Dynamic Width)"
+                            title={t('script.spacing_proportional_desc')}
                         >
-                            <Type size={14} /> Proportional
+                            <Type size={14} /> {t('script.spacing_proportional')}
                         </button>
                         <button
                             onClick={toggleSpacingMode}
@@ -329,9 +329,9 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({ scriptConfig, setScriptConf
                                 scriptConfig.spacingMode === 'mono' ? 'shadow' : ''
                             }`}
                             style={scriptConfig.spacingMode === 'mono' ? { backgroundColor: 'var(--accent)', color: 'var(--text-primary)' } : { color: 'var(--text-secondary)' }}
-                            title="Monospaced (Fixed Grid)"
+                            title={t('script.spacing_mono_desc')}
                         >
-                            <Grid size={14} /> Monospace
+                            <Grid size={14} /> {t('script.spacing_mono')}
                         </button>
                     </div>
 
@@ -342,11 +342,11 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({ scriptConfig, setScriptConf
                         <button onClick={() => setDrawMode('circle')} className={`p-1.5 rounded ${drawMode === 'circle' ? '' : ''}`} style={{ backgroundColor: drawMode === 'circle' ? 'var(--accent)' : '' }} title={t('script.tool_circle_title')}><Circle size={16} /></button>
                     </div>
                     <div className="flex items-center gap-1 bg-neutral-900 border border-neutral-800 rounded px-2 py-1">
-                        <button onClick={performUndo} disabled={undoStack.length === 0} className="p-1.5 hover:bg-neutral-800 text-neutral-500 disabled:opacity-20" title="Undo (Ctrl+Z)"><RotateCcw size={16} /></button>
-                        <button onClick={performRedo} disabled={redoStack.length === 0} className="p-1.5 hover:bg-neutral-800 text-neutral-500 disabled:opacity-20" title="Redo (Ctrl+Y)"><RotateCw size={16} /></button>
+                        <button onClick={performUndo} disabled={undoStack.length === 0} className="p-1.5 hover:bg-neutral-800 text-neutral-500 disabled:opacity-20" title={t('script.undo')}><RotateCcw size={16} /></button>
+                        <button onClick={performRedo} disabled={redoStack.length === 0} className="p-1.5 hover:bg-neutral-800 text-neutral-500 disabled:opacity-20" title={t('script.redo')}><RotateCw size={16} /></button>
                     </div>
                     <button onClick={saveGlyph} className={`px-4 py-2 rounded font-bold flex items-center gap-2 shadow-lg transition-all ${isDirty ? 'scale-105' : ''}`} style={{ backgroundColor: isDirty ? 'var(--accent)' : 'var(--surface)', color: isDirty ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
-                        <Save size={18} /> {isDirty ? 'Commit Changes' : 'Synced'}
+                        <Save size={18} /> {isDirty ? t('script.commit') : t('script.synced')}
                     </button>
                 </div>
             }
@@ -355,7 +355,7 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({ scriptConfig, setScriptConf
             <div className="flex-1 flex overflow-hidden bg-[var(--background)] text-slate-200">
                 <div className={`border-r border-neutral-800 flex flex-col bg-[var(--surface)]/50 transition-all duration-300 ${sidebarCollapsed ? 'w-12' : 'w-72'}`}>
                     <div className="p-3 border-b border-neutral-800 flex justify-between items-center bg-neutral-950">
-                        {!sidebarCollapsed && <span className="text-xs font-bold text-neutral-500 uppercase">Symbol Map</span>}
+                        {!sidebarCollapsed && <span className="text-xs font-bold text-neutral-500 uppercase">{t('script.symbol_map')}</span>}
                         <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="p-1 hover:bg-neutral-800 rounded text-neutral-500">{sidebarCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}</button>
                     </div>
 

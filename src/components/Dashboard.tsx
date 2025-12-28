@@ -1,6 +1,6 @@
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { BookA, Languages, ArrowRight, FileText, Feather, Building2 } from 'lucide-react';
+import { BookA, Languages, ArrowRight, FileText, Feather, Building2, BarChart3 } from 'lucide-react';
 import { LexiconEntry, ViewState, ScriptConfig } from '../types';
 import { useTranslation } from '../i18n';
 import { ConScriptText } from './ConScriptRenderer';
@@ -61,15 +61,15 @@ const Dashboard: React.FC<DashboardProps> = ({
       subtitle={`${t('dashboard.by')} ${displayAuthor}`}
       headerChildren={<StatBox value={totalWords} label={t('dashboard.lexiconsize')} className="min-w-[140px] shrink-0" variant="compact" />}
     >
-      <div className="p-8 max-w-7xl mx-auto space-y-8">
+      <div className="p-8 mx-auto space-y-8 max-w-7xl">
         {description && (
-          <div className="p-4 rounded-lg border" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
+          <div className="p-4 border rounded-lg" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
             <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>{description}</p>
           </div>
         )}
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <ActionButton 
             onClick={() => setView?.('LEXICON')}
             icon={<BookA size={20} />}
@@ -86,7 +86,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Recent Activity - RESTRICTED HEIGHT */}
           <Card className="lg:col-span-2 p-6 flex flex-col max-h-[400px]">
             <Section title={t('dashboard.recent_words')} icon={<FileText size={16} />} className="mb-4">
@@ -97,17 +97,17 @@ const Dashboard: React.FC<DashboardProps> = ({
               )}
             </Section>
 
-            <div className="space-y-1 overflow-y-auto custom-scrollbar flex-1">
+            <div className="flex-1 space-y-1 overflow-y-auto custom-scrollbar">
               {recentEntries.length > 0 ? (
                 recentEntries.map((entry, idx) => (
-                  <div key={`${entry.id}-${idx}`} className="flex items-center justify-between p-3 hover:bg-slate-700/50 rounded-md transition-colors border-b last:border-0 group" style={{ borderColor: 'var(--border)' }}>
+                  <div key={`${entry.id}-${idx}`} className="flex items-center justify-between p-3 transition-colors border-b rounded-md hover:bg-slate-700/50 last:border-0 group" style={{ borderColor: 'var(--border)' }}>
                       <div className="flex items-center gap-4">
                       {isScriptMode && hasScript ? (
-                        <span className="font-bold text-xl" style={{ color: 'var(--accent)' }}>
+                        <span className="text-xl font-bold" style={{ color: 'var(--accent)' }}>
                           <ConScriptText text={entry.word} scriptConfig={scriptConfig} />
                         </span>
                       ) : (
-                        <span className="font-mono font-bold text-lg" style={{ color: 'var(--accent)' }}>{entry.word}</span>
+                        <span className="font-mono text-lg font-bold" style={{ color: 'var(--accent)' }}>{entry.word}</span>
                       )}
                       <span className="text-sm" style={{ color: 'var(--text-tertiary)' }}>/{entry.ipa}/</span>
                     </div>
@@ -119,10 +119,10 @@ const Dashboard: React.FC<DashboardProps> = ({
                   </div>
                 ))
               ) : (
-                <div className="text-center py-12 border border-dashed rounded-lg" style={{ borderColor: 'var(--border)', color: 'var(--text-tertiary)' }}>
+                <div className="py-12 text-center border border-dashed rounded-lg" style={{ borderColor: 'var(--border)', color: 'var(--text-tertiary)' }}>
                   <BookA size={32} className="mx-auto mb-2 opacity-50" style={{ color: 'var(--text-tertiary)' }} />
                   <p>{t('dashboard.empty_dict')}</p>
-                  <button onClick={() => setView?.('LEXICON')} className="text-blue-500 hover:text-blue-400 text-sm mt-2 font-medium">{t('dashboard.create_first')}</button>
+                  <button onClick={() => setView?.('LEXICON')} className="mt-2 text-sm font-medium text-blue-500 hover:text-blue-400">{t('dashboard.create_first')}</button>
                 </div>
               )}
             </div>
@@ -130,7 +130,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 
           {/* Stats Chart */}
           <Card className="p-6 flex flex-col h-[400px]">
-            <Section title={t('dashboard.pos_dist')} className="mb-4" />
+            <Section title={t('dashboard.pos_dist')} icon={<BarChart3 size={16} />} className="mb-4" />
             <div className="flex-1 min-h-[250px]">
               {totalWords > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
