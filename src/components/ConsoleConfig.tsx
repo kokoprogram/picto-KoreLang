@@ -2,6 +2,7 @@ import { Info, Zap } from "lucide-react";
 import React, { useState, useEffect, useRef } from "react";
 import { LogEntry } from "../types";
 import { useTranslation } from "../i18n";
+import { useCommandExecutor, resolveModal } from "../state/commandStore";
 
 const TERMINAL_HEADER = `
 ██╗  ██╗ ██████╗ ██████╗ ███████╗██╗      █████╗ ███╗   ██╗ ██████╗ 
@@ -22,6 +23,7 @@ interface ConsoleConfigProps {
 const ConsoleConfig: React.FC<ConsoleConfigProps> = ({ history, setHistory, loadingAI, author = "user" }) => {
   const { t } = useTranslation();
   const [input, setInput] = useState("");
+  const executeCommand = useCommandExecutor();
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -52,7 +54,9 @@ const ConsoleConfig: React.FC<ConsoleConfigProps> = ({ history, setHistory, load
     if (!cmdStr.trim()) return;
     addLog("command", cmdStr);
 
-    const cmd = cmdStr.trim().toUpperCase();
+    const [rawCommand, ...args] = cmdStr.trim().split(/\s+/);
+    const cmd = rawCommand.toUpperCase();
+
     switch (cmd) {
       case "CLEAR":
       case "CLS":
@@ -63,10 +67,59 @@ const ConsoleConfig: React.FC<ConsoleConfigProps> = ({ history, setHistory, load
         addLog("output", "CLEAR - Clears the terminal.");
         addLog("output", "HELP - Shows this help message.");
         addLog("output", "ABOUT - Shows info about this console.");
+        addLog("output", "SIDEBAR - Toggle the sidebar.");
+        addLog("output", "CONSOLE OPEN|CLOSE|MAX|MIN - Control console pane.");
+        addLog("output", "NEW - Start a new project.");
+        addLog("output", "OPEN - Open an existing project.");
+        addLog("output", "MODAL <name> - Open a modal (about, settings, constraints, wizard, whatsnew).");
         break;
       case "ABOUT":
-        addLog("output", "KoreLang Console v1.1 - simplified demo.");
+        addLog("output", "KoreLang Console v1.1 - command-aware shell.");
         break;
+      case "SIDEBAR":
+        executeCommand("toggleSidebar");
+        addLog("success", "Sidebar toggled.");
+        break;
+      case "CONSOLE": {
+        const action = args[0]?.toUpperCase();
+        if (!action) {
+          addLog("error", "Specify OPEN, CLOSE, MAX, or MIN.");
+          break;
+        }
+        if (action === "OPEN") executeCommand("openConsole");
+        else if (action === "CLOSE") executeCommand("closeConsole");
+        else if (action === "MAX") executeCommand("maximizeConsole");
+        else if (action === "MIN") executeCommand("minimizeConsole");
+        else {
+          addLog("error", `Unknown console action: ${action}`);
+          break;
+        }
+        addLog("success", `Console ${action.toLowerCase()} command executed.`);
+        break;
+      }
+      case "NEW":
+        executeCommand("newProject");
+        addLog("success", "Launching new project wizard.");
+        break;
+      case "OPEN":
+        executeCommand("openProject");
+        addLog("success", "Open project triggered.");
+        break;
+      case "EXPORT":
+        executeCommand("exportProject");
+        addLog("success", "Export command dispatched.");
+        break;
+      case "MODAL": {
+        const modalName = args[0];
+        const modal = resolveModal(modalName);
+        if (!modal) {
+          addLog("error", `Unknown modal: ${modalName || "<missing>"}`);
+          break;
+        }
+        executeCommand("openModal", { modal });
+        addLog("success", `Opened modal: ${modal}.`);
+        break;
+      }
       default:
         addLog("error", `Command not recognized: ${cmdStr}`);
     }

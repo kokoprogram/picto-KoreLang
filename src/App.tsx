@@ -1,33 +1,120 @@
-import React from "react";
-import Sidebar from "./components/Sidebar";
+import React, { useEffect, useState } from "react";
+import Sidebar, { SidebarHandle } from "./components/Sidebar";
 import MenuBar from "./components/MenuBar";
+import ConsoleView from "./components/ConsoleView";
 
 import { useTheme } from "./hooks/useTheme";
 import { useProject } from "./hooks/useProject";
 import { useModals } from "./hooks/useModals";
+import { useShortcuts } from "./hooks/useShorcuts";
 import { ProjectView } from "./components/ProjectView";
 import { Modals } from "./components/Modals";
 import { Footer } from "./components/Footer";
 
-import { ViewState } from "./types";
+import { ViewState, LogEntry } from "./types";
 
 import { LanguageProvider, i18n } from "./i18n";
-import { UIProvider } from "./ui/UIContext";
+import { UIProvider, useUI } from "./ui/UIContext";
+import {
+  useCommandExecutor,
+  useCommandRegister,
+  resolveModal,
+} from "./state/commandStore";
 
 
 
 const AppContent: React.FC = () => {
   const project = useProject();
-  const theme = useTheme(project.settings.theme, project.settings.customTheme);
+  useTheme(project.settings.theme, project.settings.customTheme);
   const modals = useModals();
+  const { open } = useUI();
+  const executeCommand = useCommandExecutor();
+  const registerCommands = useCommandRegister();
+  
+  const [isConsoleOpen, setIsConsoleOpen] = useState(false);
+  const [isScriptMode, setIsScriptMode] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(100);
+  const [consoleHistory, setConsoleHistory] = useState<LogEntry[]>([]);
+  const sidebarRef = React.useRef<SidebarHandle>(null);
+
+  useEffect(() => {
+    registerCommands({
+      toggleSidebar: () => sidebarRef.current?.toggle(),
+      openConsole: () => setIsConsoleOpen(true),
+      closeConsole: () => setIsConsoleOpen(false),
+      maximizeConsole: () => {
+        setIsConsoleOpen(true);
+        window.dispatchEvent(
+          new CustomEvent("console-shortcut", { detail: { action: "maximize" } })
+        );
+      },
+      minimizeConsole: () => {
+        if (!isConsoleOpen) return;
+        window.dispatchEvent(
+          new CustomEvent("console-shortcut", { detail: { action: "minimize" } })
+        );
+      },
+      newProject: () => open("wizard"),
+      openProject: project.handlers.openProject,
+      exportProject: project.handlers.exportProject,
+      openModal: (payload) => {
+        const modal = resolveModal(payload?.modal);
+        if (modal) open(modal);
+      },
+      toggleScriptMode: () => setIsScriptMode((s) => !s),
+      zoomIn: () => setZoomLevel((z) => Math.min(z + 10, 150)),
+      zoomOut: () => setZoomLevel((z) => Math.max(z - 10, 50)),
+    });
+  }, [
+    registerCommands,
+    open,
+    project.handlers.openProject,
+    project.handlers.exportProject,
+    isConsoleOpen,
+  ]);
+
+  // Setup keyboard shortcuts
+  useShortcuts({
+    isConsoleOpen,
+    executeCommand,
+  });
 
   return (
     <div className="flex flex-col h-screen w-screen bg-[var(--bg-main)]">
-      <MenuBar {...project.handlers} {...modals.handlers} settings={project.settings} isScriptMode={false} />
+      <MenuBar 
+        newProject={() => executeCommand("newProject")}
+        openProject={() => executeCommand("openProject")}
+        exportProject={() => executeCommand("exportProject")}
+        openSettings={() => executeCommand("openModal", { modal: "settings" })}
+        openProjectSettings={() => executeCommand("openModal", { modal: "wizard" })}
+        openConstraints={() => executeCommand("openModal", { modal: "constraints" })}
+        openConsole={() => executeCommand("openConsole")}
+        zoomIn={() => executeCommand("zoomIn")}
+        zoomOut={() => executeCommand("zoomOut")}
+        toggleScriptMode={() => executeCommand("toggleScriptMode")}
+        onToggleSidebar={() => executeCommand("toggleSidebar")}
+        openAbout={() => executeCommand("openModal", { modal: "about" })}
+        settings={project.settings} 
+        isScriptMode={isScriptMode} 
+      />
       <div className="flex flex-1 overflow-hidden">
-        <Sidebar {...project.sidebarProps} />
-        <main className="flex-1 overflow-hidden">
-          <ProjectView currentView={project.currentView as ViewState} {...project.states} />
+        <Sidebar ref={sidebarRef} {...project.sidebarProps} />
+        <main className="flex-1 overflow-hidden" style={{ zoom: zoomLevel / 100 }}>
+          <ProjectView 
+            currentView={project.currentView as ViewState} 
+            {...project.states}
+            isScriptMode={isScriptMode}
+            setCurrentView={project.setCurrentView}
+          />
+          {isConsoleOpen && (
+            <ConsoleView
+              isOpen={isConsoleOpen}
+              loadingAI={project.settings.enableAI}
+              onClose={() => setIsConsoleOpen(false)}
+              history={consoleHistory}
+              setHistory={setConsoleHistory}
+            />
+          )}
         </main>
       </div>
       <Modals modals={modals} />
