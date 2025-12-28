@@ -4,7 +4,7 @@ import { Feather, Save, Image as ImageIcon, Palette, Spline, RotateCw, RotateCcw
 import { ScriptConfig, ScriptGlyph, ProjectConstraints, GlyphStroke } from '../types';
 import { useTranslation } from '../i18n';
 import { ConScriptText } from './ConScriptRenderer';
-import { Card, Section } from './ui';
+import { Card, Section, ViewHeader } from './ui';
 
 interface ScriptEditorProps {
     scriptConfig: ScriptConfig;
@@ -307,14 +307,7 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({ scriptConfig, setScriptConf
 
     return (
         <div className="h-full flex flex-col bg-[var(--background)] overflow-hidden text-slate-200">
-            <div className="p-4 border-b border-neutral-800 flex justify-between items-center bg-[var(--surface)]/50 z-20">
-                <div className="flex items-center gap-3">
-                    <div className="p-2 bg-purple-900/20 rounded"><Feather className="text-purple-500" size={20} /></div>
-                    <div>
-                        <h2 className="text-xl font-bold" style={{ color: 'var(--text-secondary)' }}>Neural-Glyph Studio v4.6</h2>
-                        <p className="text-xs text-slate-500 tracking-wide uppercase font-bold">Professional Layer Engine</p>
-                    </div>
-                </div>
+            <ViewHeader icon={Feather} title="Neural-Glyph Studio v4.6" subtitle="Professional Layer Engine">
                 <div className="flex gap-4 items-center">
                     <div className="flex gap-1 bg-neutral-900 border border-neutral-800 rounded p-1">
                         <button
@@ -353,7 +346,7 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({ scriptConfig, setScriptConf
                         <Save size={18} /> {isDirty ? 'Commit Changes' : 'Synced'}
                     </button>
                 </div>
-            </div>
+            </ViewHeader>
 
             <div className="flex-1 flex overflow-hidden">
                 <div className={`border-r border-neutral-800 flex flex-col bg-[var(--surface)]/50 transition-all duration-300 ${sidebarCollapsed ? 'w-12' : 'w-72'}`}>
