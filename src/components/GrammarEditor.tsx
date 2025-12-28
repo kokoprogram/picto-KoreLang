@@ -5,7 +5,7 @@ import MorphologyEditor from './MorphologyEditor';
 import CodeEditor from './CodeEditor';
 import { MorphologyState, ScriptConfig } from '../types';
 import { useTranslation } from '../i18n';
-import { Card, Section } from './ui';
+import { Card, Section, ViewHeader } from './ui';
 
 interface GrammarEditorProps {
     grammar: string;
@@ -37,16 +37,8 @@ const GrammarEditor: React.FC<GrammarEditorProps> = ({ grammar, setGrammar, morp
     const totalRules = morphology.paradigms.reduce((acc, p) => acc + p.rules.length, 0);
 
     return (
-        <div className="h-full flex flex-col p-6 max-w-7xl mx-auto w-full gap-6">
-            <div className="flex justify-between items-end">
-                <div>
-                    <h2 className="text-3xl font-bold mb-2 flex items-center gap-3" style={{ color: 'var(--text-primary)' }}>
-                        <Languages style={{ color: 'var(--accent)' }} />
-                        {t('grammar.title')}
-                    </h2>
-                    <p style={{ color: 'var(--text-secondary)' }}>{t('grammar.desc')}</p>
-                </div>
-
+        <div className="h-full flex flex-col">
+            <ViewHeader icon={Languages} title={t('grammar.title')} subtitle={t('grammar.desc')}>
                 {/* View Switcher Tabs */}
                 <div className="flex p-1 rounded-lg border" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
                     <button
@@ -74,8 +66,9 @@ const GrammarEditor: React.FC<GrammarEditorProps> = ({ grammar, setGrammar, morp
                         <Table size={16} /> {t('grammar.tab.morphology')}
                     </button>
                 </div>
-            </div>
+            </ViewHeader>
 
+            <div className="p-6 max-w-7xl mx-auto w-full flex-1 overflow-hidden flex flex-col gap-6">
             {activeTab === 'SYNTAX' ? (
                 <div className="flex-1 flex flex-col lg:flex-row gap-6 overflow-hidden animate-in fade-in duration-300">
                     {/* BNF Editor Panel */}
@@ -185,6 +178,7 @@ const GrammarEditor: React.FC<GrammarEditorProps> = ({ grammar, setGrammar, morp
                     />
                 </div>
             )}
+            </div>
         </div>
     );
 };

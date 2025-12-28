@@ -3,6 +3,7 @@ import { Save, RefreshCw, AlertTriangle, FileJson } from 'lucide-react';
 import CodeEditor from './CodeEditor';
 import { ProjectData } from '../types';
 import { useTranslation } from '../i18n';
+import { ViewHeader } from './ui';
 
 interface SourceViewProps {
   data: ProjectData;
@@ -35,15 +36,8 @@ const SourceView: React.FC<SourceViewProps> = ({ data, onApply }) => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-slate-950">
-        <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
-            <div>
-                <h2 className="text-xl font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
-                    <FileJson style={{ color: 'var(--accent)' }} size={20} />
-                    {t('source.title')}
-                </h2>
-                <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{t('source.desc')}</p>
-            </div>
+    <div className="h-full flex flex-col" style={{ backgroundColor: 'var(--background)' }}>
+        <ViewHeader icon={FileJson} title={t('source.title')} subtitle={t('source.desc')}>
             <div className="flex gap-2">
                 <button 
                     onClick={handleReset}
@@ -62,7 +56,7 @@ const SourceView: React.FC<SourceViewProps> = ({ data, onApply }) => {
                     <Save size={16} fill="currentColor" /> {t('source.apply')}
                 </button>
             </div>
-        </div>
+        </ViewHeader>
 
         {error && (
             <div className="bg-red-900/20 border-b border-red-500/30 p-3 text-red-200 text-xs flex items-center gap-2">
