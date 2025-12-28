@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   FileText,
   FolderOpen,
@@ -38,52 +38,42 @@ interface MenuGroup {
   label: string;
   items: MenuEntry[];
 }
-
 interface MenuBarProps {
-  onNewProject: () => void;
-  onOpenProject: (file: File) => void;
-  onSaveProject: () => void;
-  onOpenSettings: () => void;
-  onOpenProjectSettings: () => void;
-  onOpenConstraints: () => void;
-  onOpenConsole: () => void;
-  onZoomIn: () => void;
-  onZoomOut: () => void;
-  onToggleSidebar: () => void;
+  actions: {
+    newProject: () => void;
+    openProject: () => void;
+    exportProject: () => void;
+    openSettings: () => void;
+    openProjectSettings: () => void;
+    openConstraints: () => void;
+    openConsole: () => void;
+    zoomIn: () => void;
+    zoomOut: () => void;
+    toggleSidebar: () => void;
+    toggleScriptMode?: () => void;
+    openAbout: () => void;
+  };
   settings: AppSettings;
-  isScriptMode?: boolean; // NEW PROP
-  onToggleScriptMode?: () => void; // NEW PROP
-  onOpenAbout?: () => void;
+  isScriptMode: boolean;
 }
 
 const MenuBar: React.FC<MenuBarProps> = ({
-  onNewProject,
-  onOpenProject,
-  onSaveProject,
-  onOpenSettings,
-  onOpenProjectSettings,
-  onOpenConstraints,
-  onOpenConsole,
-  onZoomIn,
-  onZoomOut,
-  onToggleSidebar,
+  actions,
   settings,
   isScriptMode,
-  onToggleScriptMode,
-  onOpenAbout,
 }) => {
   const { t } = useTranslation();
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      onOpenProject(e.target.files[0]);
+      actions.openProject();
     }
-    // Reset to allow selecting same file again
     if (fileInputRef.current) fileInputRef.current.value = "";
     setActiveMenu(null);
   };
+
 
   const menuItems: MenuGroup[] = [
     {
@@ -93,20 +83,20 @@ const MenuBar: React.FC<MenuBarProps> = ({
         {
           label: t("menu.new_project"),
           icon: FileText,
-          action: onNewProject,
+          action: actions.newProject,
           shortcut: "Alt+N",
         },
         {
           label: t("menu.open_project"),
           icon: FolderOpen,
-          action: () => fileInputRef.current?.click(),
+          action: actions.openProject,
           shortcut: "Alt+O",
         },
         { type: "separator" },
         {
           label: t("menu.export_json"),
           icon: Download,
-          action: onSaveProject,
+          action: actions.exportProject,
           shortcut: "Alt+E",
         },
       ],
@@ -118,11 +108,15 @@ const MenuBar: React.FC<MenuBarProps> = ({
         {
           label: t("menu.toggle_sidebar"),
           icon: Command,
-          action: onToggleSidebar,
+          action: actions.toggleSidebar,
           shortcut: "Alt+B",
-        }, // CORRECTED SHORTCUT
-        { label: t("menu.zoom_in"), action: onZoomIn, shortcut: "Alt+" }, // CORRECTED SHORTCUT
-        { label: t("menu.zoom_out"), action: onZoomOut, shortcut: "Alt-" }, // CORRECTED SHORTCUT
+        },
+        { label: t("menu.zoom_in"), action: actions.zoomIn, shortcut: "Alt+" },
+        {
+          label: t("menu.zoom_out"),
+          action: actions.zoomOut,
+          shortcut: "Alt-",
+        },
       ],
     },
     {
@@ -132,13 +126,12 @@ const MenuBar: React.FC<MenuBarProps> = ({
         {
           label: t("menu.validation"),
           icon: ShieldCheck,
-          action: onOpenConstraints,
-          shortcut: "",
+          action: actions.openConstraints,
         },
         {
           label: t("menu.console"),
           icon: Terminal,
-          action: onOpenConsole,
+          action: actions.openConsole,
           shortcut: "Alt+C",
         },
       ],
@@ -150,13 +143,12 @@ const MenuBar: React.FC<MenuBarProps> = ({
         {
           label: t("menu.project"),
           icon: Info,
-          action: onOpenProjectSettings,
+          action: actions.openProjectSettings,
         },
         {
           label: t("menu.preferences"),
           icon: Settings,
-          action: onOpenSettings,
-          shortcut: "",
+          action: actions.openSettings,
         },
       ],
     },
@@ -170,7 +162,7 @@ const MenuBar: React.FC<MenuBarProps> = ({
           action: () =>
             window.open("https://github.com/zRinexD/KoreLang/", "_blank"),
         },
-        { label: t("menu.about"), action: () => onOpenAbout?.() },
+        { label: t("menu.about"), action: () => actions.openAbout?.() },
       ],
     },
   ];
@@ -199,13 +191,10 @@ const MenuBar: React.FC<MenuBarProps> = ({
         className="hidden"
         accept=".json"
       />
-
-      {/* Logo Area - me-4 (margin-end) flips margin for RTL */}
       <div className="flex items-center gap-2 px-2 font-bold text-blue-500 me-4">
         <span>⚡ KL</span>
       </div>
 
-      {/* Menu Items */}
       <div className="flex h-full">
         {menuItems.map((menu) => (
           <div
@@ -225,24 +214,21 @@ const MenuBar: React.FC<MenuBarProps> = ({
             >
               {menu.label}
             </button>
-
             {activeMenu === menu.id && (
               <>
                 <div
                   className="fixed inset-0 z-40"
                   onClick={() => setActiveMenu(null)}
                 />
-                {/* start-0 (left in LTR, right in RTL) ensures alignment matches direction */}
                 <div className="absolute z-50 w-56 py-1 border shadow-xl start-0 top-full bg-neutral-900 border-neutral-700 rounded-b-md">
                   {menu.items.map((item, idx) => {
-                    if (item.type === "separator") {
+                    if (item.type === "separator")
                       return (
                         <div
                           key={idx}
                           className="h-px mx-2 my-1 bg-neutral-700"
                         />
                       );
-                    }
                     const Icon = item.icon;
                     return (
                       <button
@@ -279,12 +265,10 @@ const MenuBar: React.FC<MenuBarProps> = ({
 
       <div className="flex-1" />
 
-      {/* Right Side Tools */}
       <div className="flex items-center gap-4">
-        {/* GLOBAL SCRIPT TOGGLE */}
-        {onToggleScriptMode && (
+        {actions.toggleScriptMode && (
           <button
-            onClick={onToggleScriptMode}
+            onClick={actions.toggleScriptMode}
             className={`flex items-center gap-2 px-3 py-1 rounded-md text-xs font-bold transition-all border ${
               isScriptMode
                 ? "bg-purple-900/40 text-purple-300 border-purple-500/50 shadow-[0_0_10px_rgba(168,85,247,0.2)]"
@@ -299,9 +283,7 @@ const MenuBar: React.FC<MenuBarProps> = ({
             <span className="hidden sm:inline">Script Mode</span>
           </button>
         )}
-
-        <div className="w-px h-4 bg-neutral-800"></div>
-
+        <div className="w-px h-4 bg-neutral-800" />
         <div className="mr-2 text-xs text-neutral-500">
           {t("menu.env")}: {getThemeLabel()}
         </div>

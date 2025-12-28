@@ -51,6 +51,52 @@ const AppContent: React.FC = () => {
   const [consoleHistory, setConsoleHistory] = useState<LogEntry[]>([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
+  /*  ---------------- ACTION CALLBACKS ---------------- */
+const promptOpenProject = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
+    input.onchange = () => {
+      const file = input.files?.[0];
+      if (!file) return;
+       const reader = new FileReader();
+      reader.onload = (e) => {
+        loadProjectData(JSON.parse(e.target?.result as string));
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  };
+
+
+  const menuBarActions = {
+    newProject: () => {
+      setWizardMode("create");
+      setIsWizardOpen(true);
+    },
+    exportProject: () => {
+      const data = getFullProjectData();
+      const text = JSON.stringify(data, null, 2);
+      const blob = new Blob([text], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `${projectName.toLowerCase().replace(/\s/g, "-")}.json`;
+      a.click();
+    },
+    openProject: promptOpenProject,
+    openSettings: () => setIsSettingsOpen(true),
+    openProjectSettings: () => {
+      setWizardMode("edit");
+      setIsWizardOpen(true);
+    },
+    openConstraints: () => setIsConstraintsOpen(true),
+    openConsole: () => setIsConsoleOpen(true),
+    zoomIn: () => setZoomLevel((z) => Math.min(z + 10, 150)),
+    zoomOut: () => setZoomLevel((z) => Math.max(z - 10, 50)),
+    toggleSidebar: () => setIsSidebarOpen((o) => !o),
+    toggleScriptMode: () => setIsScriptMode((s) => !s),
+    openAbout: () => setIsAboutOpen(true),
+  };
   /* ---------------- PROJECT STATE (HOOK) ---------------- */
 
   const {
@@ -136,39 +182,14 @@ const AppContent: React.FC = () => {
   }, []);
 
   /* ---------------- SHORTCUTS ---------------- */
-
+  
   useShortcuts({
     isConsoleOpen,
     setIsConsoleOpen,
     setIsSidebarOpen,
-    onNewProject: () => {
-      setWizardMode("create");
-      setIsWizardOpen(true);
-    },
-    onOpenProject: () => {
-      const input = document.createElement("input");
-      input.type = "file";
-      input.accept = ".json";
-      input.onchange = () => {
-        const file = input.files?.[0];
-        if (!file) return;
-        const r = new FileReader();
-        r.onload = (e) =>
-          loadProjectData(JSON.parse(e.target?.result as string));
-        r.readAsText(file);
-      };
-      input.click();
-    },
-    onExportProject: () => {
-      const data = getFullProjectData();
-      const text = JSON.stringify(data, null, 2);
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(
-        new Blob([text], { type: "application/json" })
-      );
-      a.download = `${projectName.toLowerCase().replace(/\s/g, "-")}.json`;
-      a.click();
-    },
+    onNewProject: menuBarActions.newProject,
+    onOpenProject: menuBarActions.openProject,
+    onExportProject: menuBarActions.exportProject,
     onZoomIn: () => setZoomLevel((z) => Math.min(z + 10, 150)),
     onZoomOut: () => setZoomLevel((z) => Math.max(z - 10, 50)),
   });
@@ -300,26 +321,9 @@ const AppContent: React.FC = () => {
   return (
     <div className="flex flex-col h-screen w-screen bg-[var(--bg-main)] text-[var(--text-1)] font-sans overflow-hidden transition-colors duration-200">
       <MenuBar
-        onNewProject={() => {
-          setWizardMode("create");
-          setIsWizardOpen(true);
-        }}
-        onSaveProject={() => {}}
-        onOpenProject={() => {}}
-        onOpenSettings={() => setIsSettingsOpen(true)}
-        onOpenProjectSettings={() => {
-          setWizardMode("edit");
-          setIsWizardOpen(true);
-        }}
-        onOpenConstraints={() => setIsConstraintsOpen(true)}
-        onOpenConsole={() => setIsConsoleOpen(true)}
-        onZoomIn={() => setZoomLevel((z) => Math.min(z + 10, 150))}
-        onZoomOut={() => setZoomLevel((z) => Math.max(z - 10, 50))}
-        onToggleSidebar={() => setIsSidebarOpen((o) => !o)}
+        actions={menuBarActions}
         settings={settings}
         isScriptMode={isScriptMode}
-        onToggleScriptMode={() => setIsScriptMode((s) => !s)}
-        onOpenAbout={() => setIsAboutOpen(true)}
       />
 
       <div className="flex flex-1 overflow-hidden">
@@ -341,6 +345,7 @@ const AppContent: React.FC = () => {
           {isConsoleOpen && (
             <ConsoleView
               isOpen={isConsoleOpen}
+              loadingAI={settings.enableAI}
               onClose={() => setIsConsoleOpen(false)}
               history={consoleHistory}
               setHistory={setConsoleHistory}

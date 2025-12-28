@@ -14,7 +14,7 @@ type UseShortcutsParams = {
 };
 
 type Shortcut = {
-  keys: string[]; 
+  keys: string[];
   alt?: boolean;
   ctrl?: boolean;
   meta?: boolean;
@@ -38,7 +38,7 @@ export function useShortcuts({
       { keys: ["c"], alt: true, action: () => setIsConsoleOpen(true) },
       { keys: ["b"], alt: true, action: () => setIsSidebarOpen((v) => !v) },
       { keys: ["n"], alt: true, action: onNewProject },
-      { keys: ["o"], alt: true, action: onOpenProject },
+      { keys: ["o"], alt: true, action: () => onOpenProject() },
       { keys: ["e"], alt: true, action: onExportProject },
       { keys: ["+"], alt: true, action: onZoomIn },
       { keys: ["-"], alt: true, action: onZoomOut },
