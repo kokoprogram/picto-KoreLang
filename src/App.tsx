@@ -34,7 +34,7 @@ import { useWhatsNewOnBoot } from "./hooks/useWhatsNewOnBoot";
 const SETTINGS_STORAGE_KEY = "conlang_studio_settings";
 
 const AppContent: React.FC = () => {
-  /* ---------------- UI STATE ---------------- */
+
   const ui = useUI();
   useWhatsNewOnBoot(ui);
 
