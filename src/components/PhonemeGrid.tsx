@@ -78,6 +78,7 @@ interface AddPhonemeModalState {
 
 interface PhonemeGridWithModelsProps extends PhonemeGridProps {
     phonemeModels: PhonemeModel[];
+    onAddPhoneme: (phoneme: PhonemeModel, row: string, col: string, isVowel: boolean) => void;
 }
 
 const PhonemeGrid: React.FC<PhonemeGridWithModelsProps> = ({
@@ -91,6 +92,7 @@ const PhonemeGrid: React.FC<PhonemeGridWithModelsProps> = ({
     legend,
     unclassified,
     phonemeModels,
+    onAddPhoneme,
 }) => {
         // État pour la modal d'ajout de phonème
         const [addModal, setAddModal] = useState<AddPhonemeModalState>({ open: false, row: null, col: null });
@@ -215,9 +217,10 @@ const PhonemeGrid: React.FC<PhonemeGridWithModelsProps> = ({
             manner={addModal.row || ''}
             phonemes={phonemeModels}
             onSelect={(phoneme) => {
-                // TODO: intégrer la logique d'ajout dans la grille
+                if (addModal.row && addModal.col) {
+                    onAddPhoneme(phoneme, addModal.row, addModal.col, isVowels);
+                }
                 setAddModal({ open: false, row: null, col: null });
-                // ...
             }}
         />
 

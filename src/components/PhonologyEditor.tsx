@@ -198,6 +198,33 @@ const PhonologyEditor: React.FC<PhonologyEditorProps> = ({ data, setData, enable
                         position: 'top',
                     }}
                     phonemeModels={phonemeModels}
+                    onAddPhoneme={(phoneme, row, col, isVowel) => {
+                        if (isVowel) {
+                            const newVowel: Phoneme = {
+                                symbol: phoneme.symbol,
+                                type: 'vowel',
+                                height: row,
+                                backness: col,
+                                ...(phoneme.features || {}),
+                            };
+                            setData({
+                                ...data,
+                                vowels: [...(data.vowels || []), newVowel],
+                            });
+                        } else {
+                            const newConsonant: Phoneme = {
+                                symbol: phoneme.symbol,
+                                type: 'consonant',
+                                manner: row,
+                                place: col,
+                                ...(phoneme.features || {}),
+                            };
+                            setData({
+                                ...data,
+                                consonants: [...(data.consonants || []), newConsonant],
+                            });
+                        }
+                    }}
                 />
                 </div>
                 <PhonemeGrid
@@ -233,6 +260,34 @@ const PhonologyEditor: React.FC<PhonologyEditorProps> = ({ data, setData, enable
                         ),
                     }}
                     phonemeModels={phonemeModels}
+                    onAddPhoneme={(phoneme, row, col, isVowel) => {
+                        // Ajout métier dans la grille
+                        if (isVowel) {
+                            const newVowel = {
+                                symbol: phoneme.symbol,
+                                type: 'vowel' as const,
+                                height: row,
+                                backness: col,
+                                ...(phoneme.features || {}),
+                            };
+                            setData({
+                                ...data,
+                                vowels: [...(data.vowels || []), newVowel],
+                            });
+                        } else {
+                            const newConsonant = {
+                                symbol: phoneme.symbol,
+                                type: 'consonant' as const,
+                                manner: row,
+                                place: col,
+                                ...(phoneme.features || {}),
+                            };
+                            setData({
+                                ...data,
+                                consonants: [...(data.consonants || []), newConsonant],
+                            });
+                        }
+                    }}
                 />
                 </div>
 
