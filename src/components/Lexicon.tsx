@@ -7,7 +7,7 @@ import { ConScriptText } from './ConScriptRenderer';
 import { useTranslation } from '../i18n';
 import { searchLexicon, SearchResult } from '../services/searchService';
 import { isApiKeySet } from '../services/geminiService';
-import { ViewLayout, CompactButton } from './ui';
+import { ViewLayout, CompactButton, StatBadge } from './ui';
 import LexiconLetterIndicator from './LexiconLetterIndicator';
 
 interface LexiconProps {
@@ -443,32 +443,24 @@ const Lexicon: React.FC<LexiconProps> = ({
             >
                 {entry.derivedFrom && <GitFork className={`absolute ${direction === 'rtl' ? '-left-4 -scale-x-100' : '-right-4'} -top-4 text-neutral-800 opacity-20 w-32 h-32 rotate-12`} />}
 
-                {/* ACTION BUTTONS */}
-                <div className="absolute top-0 right-0 flex gap-0 transition-opacity border-b border-l rounded-bl-lg opacity-0 group-hover:opacity-100" style={{ borderColor: 'var(--border)', backgroundColor: 'var(--accent)' }}>
-                    {/* Copy Script Button (Only in Script Mode) */}
-                    {isScriptMode && (
-                        <button
-                            onClick={(ev) => { ev.stopPropagation(); handleCopyScript(entry); }}
-                            className="p-1.5 transition-colors"
-                            style={{ color: 'var(--text-primary)' }}
-                            title={t('lexicon.copy_native') || "Copy Native Script Symbols (PUA)"}
-                        >
-                            {copiedId === `${entry.id}-script` ? <Check size={14} className="text-emerald-500" /> : <Feather size={14} />}
-                        </button>
-                    )}
-
+                {/* ACTION BUTTONS fading in (no container background) */}
+                <div className="absolute top-0 right-0 flex transition-opacity opacity-0 group-hover:opacity-100">
                     <button
                         onClick={(ev) => { ev.stopPropagation(); openEditModal(entry); }}
-                        className="p-1.5 transition-colors"
-                        style={{ color: 'var(--text-primary)' }}
+                        className="px-2 py-2 transition-colors rounded-bl-lg"
+                        style={{ color: 'var(--text-primary)', backgroundColor: 'var(--accent)' }}
+                        onMouseEnter={(e) => { e.currentTarget.style.filter = 'brightness(0.85)'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.filter = 'none'; }}
                         title={t('lexicon.edit')}
                     >
                         <Edit size={14} />
                     </button>
                     <button
                         onClick={(e) => { e.stopPropagation(); requestDelete(entry, e); }}
-                        className="p-1.5 transition-colors"
-                        style={{ color: 'var(--text-primary)' }}
+                        className="px-2 py-2 transition-colors rounded-tr-lg"
+                        style={{ color: 'var(--text-primary)', backgroundColor: 'var(--accent)' }}
+                        onMouseEnter={(e) => { e.currentTarget.style.filter = 'brightness(0.85)'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.filter = 'none'; }}
                         title={t('common.delete')}
                     >
                         <Trash2 size={14} />
@@ -602,9 +594,11 @@ const Lexicon: React.FC<LexiconProps> = ({
                 )}
             </div>
             <div className="flex items-center gap-4">
-                <span className="hidden font-mono text-sm text-neutral-500 md:inline-block">
-                    {isSearchActive ? `${searchResults.length} ${t('lexicon.results_count')}` : `${entries.length} ${t('lexicon.entries_count')}`}
-                </span>
+                <StatBadge
+                    value={entries.length}
+                    label={"words"}
+                    className="hidden md:flex"
+                />
                 {enableAI && (
                     <CompactButton
                         onClick={() => setActiveTab('GENERATE')}
@@ -617,7 +611,7 @@ const Lexicon: React.FC<LexiconProps> = ({
                 <CompactButton
                     onClick={openAddModal}
                     variant="solid"
-                    color="var(--accent)"
+                    color="var(--primary)"
                     icon={<Plus size={16} />}
                     label={t('lexicon.new')}
                 />
@@ -669,13 +663,12 @@ const Lexicon: React.FC<LexiconProps> = ({
             headerChildren={headerActions}
         >
             {(showFilters || posFilter !== 'ALL') && (
-                <div className="px-4 pb-4 duration-200 animate-in slide-in-from-top-2">
-                    <div className="flex flex-wrap items-center gap-4 p-3 border rounded-lg" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
+                <div className="sticky flex justify-start pb-0" style={{ top: 0, left: 0, right: 0, zIndex: 45 }}>
+                    <div className="w-full flex flex-wrap items-center gap-3 p-2 border" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
                         <div className="flex items-center gap-2 pr-4 border-r rtl:border-r-0 rtl:border-l rtl:pr-0 rtl:pl-4" style={{ borderColor: 'var(--divider)' }}>
                             <Filter size={14} style={{ color: 'var(--text-tertiary)' }} />
-                            <span className="text-xs font-bold uppercase" style={{ color: 'var(--text-tertiary)' }}>{t('lexicon.pos')}:</span>
                             <select value={posFilter} onChange={(e) => setPosFilter(e.target.value)} className="px-2 py-1 text-xs border rounded outline-none focus:ring-1" style={{ backgroundColor: 'var(--elevated)', borderColor: 'var(--border)', color: 'var(--text-primary)', caretColor: 'var(--accent)', outlineColor: 'var(--accent)' }}>
-                                <option value="ALL">{t('val.any_pos') || 'Any POS'}</option>
+                                <option value="ALL">{t('lexicon.all_types')}</option>
                                 {POS_SUGGESTIONS.map(pos => <option key={pos} value={pos}>{getPosLabel(pos)}</option>)}
                             </select>
                         </div>
