@@ -105,7 +105,11 @@ const PhonemeGrid: React.FC<PhonemeGridWithModelsProps> = ({
     // Mémoiser les données de la grille pour éviter les recalculs
     const gridData = useMemo(() => {
         return rows.map(row => 
-            columns.map(col => getPhonemes(row, col).filter(p => p.phoneme.symbol))
+            columns.map(col => {
+                const arr = getPhonemes(row, col);
+                if (!Array.isArray(arr)) return [];
+                return arr.filter(p => p && p.phoneme && typeof p.phoneme.symbol === 'string');
+            })
         );
     }, [rows, columns, getPhonemes]);
 

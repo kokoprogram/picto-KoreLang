@@ -23,49 +23,90 @@ const PhonologyEditor: React.FC<PhonologyEditorProps> = (props) => {
 
 
   const { phonology, setData } = props;
-  // Add a dummy consonant (for demo)
-  const handleAddConsonant = () => {
-    // Pick the first consonant model as a demo
-    const model = PHONEME_MODELS.find(p => p.category === 'consonant') || PHONEME_MODELS[0];
-    if (!model) return;
-    const manner = typeof model.features?.manner === 'string' ? model.features.manner : '';
-    const place = typeof model.features?.place === 'string' ? model.features.place : '';
-    const newInstance: PhonemeInstance = {
-      id: 'dummy-c-' + (phonology.consonants.length + 1),
-      phoneme: model,
-      type: 'consonant',
-      manner,
-      place,
-      diacritics: [],
-      features: {},
-    };
-    setData({ ...phonology, consonants: [...phonology.consonants, newInstance] });
+  // Utility: get phonemes for a consonant cell
+  const getConsonantPhonemes = (manner: string, place: string) =>
+    phonology.consonants.filter(p => p.manner === manner && p.place === place);
+
+  // Utility: get phonemes for a vowel cell
+  const getVowelPhonemes = (height: string, backness: string) =>
+    phonology.vowels.filter(p => p.height === height && p.backness === backness);
+
+  // Remove a phoneme instance
+  const handleRemove = (instance: PhonemeInstance, isVowel: boolean) => {
+    if (isVowel) {
+      setData({ ...phonology, vowels: phonology.vowels.filter(p => p.id !== instance.id) });
+    } else {
+      setData({ ...phonology, consonants: phonology.consonants.filter(p => p.id !== instance.id) });
+    }
   };
-  // Add a dummy vowel (for demo)
-  const handleAddVowel = () => {
-    // Pick the first vowel model as a demo
-    const model = PHONEME_MODELS.find(p => p.category === 'vowel') || PHONEME_MODELS[0];
-    if (!model) return;
-    const height = typeof model.features?.height === 'string' ? model.features.height : '';
-    const backness = typeof model.features?.backness === 'string' ? model.features.backness : '';
-    const newInstance: PhonemeInstance = {
-      id: 'dummy-v-' + (phonology.vowels.length + 1),
-      phoneme: model,
-      type: 'vowel',
-      height,
-      backness,
-      diacritics: [],
-      features: {},
-    };
-    setData({ ...phonology, vowels: [...phonology.vowels, newInstance] });
+
+  // Add a phoneme instance to the grid
+  const handleAddPhoneme = (phoneme: PhonemeModel, row: string, col: string, isVowel: boolean) => {
+    if (isVowel) {
+      const newInstance: PhonemeInstance = {
+        id: `${phoneme.id}-v-${row}-${col}-${Date.now()}`,
+        phoneme,
+        type: 'vowel',
+        height: row,
+        backness: col,
+        diacritics: [],
+        features: {},
+      };
+      setData({ ...phonology, vowels: [...phonology.vowels, newInstance] });
+    } else {
+      const newInstance: PhonemeInstance = {
+        id: `${phoneme.id}-c-${row}-${col}-${Date.now()}`,
+        phoneme,
+        type: 'consonant',
+        manner: row,
+        place: col,
+        diacritics: [],
+        features: {},
+      };
+      setData({ ...phonology, consonants: [...phonology.consonants, newInstance] });
+    }
   };
+
+  // Render a phoneme instance (symbol)
+  const renderPhoneme = (p: PhonemeInstance) => <span>{p.phoneme.symbol}</span>;
+
   return (
     <div style={{ padding: 32 }}>
       <h2>Phonology Inventory</h2>
-      <div>Consonants: {phonology.consonants.length}</div>
-      <div>Vowels: {phonology.vowels.length}</div>
-      <button onClick={handleAddConsonant} style={{ marginTop: 16, padding: 8, marginRight: 8 }}>Add Dummy Consonant</button>
-      <button onClick={handleAddVowel} style={{ marginTop: 16, padding: 8 }}>Add Dummy Vowel</button>
+      <div style={{ display: 'flex', gap: 32 }}>
+        <div style={{ flex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
+            <span style={{ fontWeight: 600, fontSize: 16, marginRight: 8 }}>Consonants</span>
+            {/* Add button for consonants (opens modal via grid) */}
+          </div>
+          <PhonemeGrid
+            title="Consonant Grid"
+            icon={<span>C</span>}
+            isVowels={false}
+            getPhonemes={getConsonantPhonemes}
+            onRemove={p => handleRemove(p, false)}
+            renderPhoneme={renderPhoneme}
+            phonemeModels={PHONEME_MODELS.filter(p => p.category === 'consonant')}
+            onAddPhoneme={handleAddPhoneme}
+          />
+        </div>
+        <div style={{ flex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
+            <span style={{ fontWeight: 600, fontSize: 16, marginRight: 8 }}>Vowels</span>
+            {/* Add button for vowels (opens modal via grid) */}
+          </div>
+          <PhonemeGrid
+            title="Vowel Grid"
+            icon={<span>V</span>}
+            isVowels={true}
+            getPhonemes={getVowelPhonemes}
+            onRemove={p => handleRemove(p, true)}
+            renderPhoneme={renderPhoneme}
+            phonemeModels={PHONEME_MODELS.filter(p => p.category === 'vowel')}
+            onAddPhoneme={handleAddPhoneme}
+          />
+        </div>
+      </div>
     </div>
   );
 };
