@@ -63,9 +63,9 @@ const GenEvolve: React.FC<GenEvolveProps> = ({ entries, onUpdateEntries, rules, 
             }
         >
 
-                <div className="flex-1 flex overflow-hidden">
+                <div className="h-full w-full flex overflow-hidden">
             {/* Rules Editor */}
-            <div className="w-1/3 border-r p-6 overflow-y-auto" style={{ borderColor: 'var(--border)' }}>
+            <div className="w-1/3 border-r p-6 overflow-y-auto h-full" style={{ borderColor: 'var(--border)' }}>
                 <div className="flex justify-between items-center mb-4">
                     <h3 className="text-lg font-semibold" style={{ color: 'var(--text-secondary)' }}>{t('genevolve.sound_changes')}</h3>
                     <CompactButton
@@ -119,7 +119,7 @@ const GenEvolve: React.FC<GenEvolveProps> = ({ entries, onUpdateEntries, rules, 
             </div>
 
             {/* Results Preview */}
-            <div className="flex-1 p-6 overflow-y-auto flex flex-col" style={{ backgroundColor: 'var(--surface)' }}>
+            <div className="flex-1 p-6 overflow-y-auto flex flex-col h-full" style={{ backgroundColor: 'var(--surface)' }}>
                 <div className="flex justify-between items-center mb-6">
                     <h3 className="text-lg font-semibold flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
                         {t('genevolve.preview')}
