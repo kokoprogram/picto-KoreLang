@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { BookOpen, Eraser, Save, Copy, ZoomIn, ZoomOut, Type } from 'lucide-react';
+import { BookOpen, Eraser, Copy, Type } from 'lucide-react';
 import { ConScriptText } from './ConScriptRenderer';
 import { ScriptConfig } from '../types';
 import { useTranslation } from '../i18n';
-import { ViewLayout } from './ui';
+import { ViewLayout, CompactButton, StatBadge } from './ui';
 
 interface NotebookProps {
     scriptConfig?: ScriptConfig;
@@ -32,7 +32,7 @@ const Notebook: React.FC<NotebookProps> = ({ scriptConfig, isScriptMode, text, s
             subtitle={t('notebook.subtitle')}
             headerChildren={
                 <>
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded border group" style={{ backgroundColor: 'var(--background)', borderColor: 'var(--text-secondary)' }}>
+                    <div className="flex items-center gap-2 px-3 py-1.5 rounded border" style={{ backgroundColor: 'var(--background)', borderColor: 'var(--text-secondary)' }}>
                         <Type size={14} style={{ color: 'var(--text-secondary)' }} />
                         <input
                             type="range"
@@ -46,56 +46,69 @@ const Notebook: React.FC<NotebookProps> = ({ scriptConfig, isScriptMode, text, s
                         <span className="text-[10px] font-mono w-8 text-center" style={{ color: 'var(--text-secondary)' }}>{fontSize}px</span>
                     </div>
 
-                    <div className="flex gap-1 p-1 rounded border" style={{ backgroundColor: 'var(--background)', borderColor: 'var(--text-secondary)' }}>
-                        <button onClick={() => setText('')} className="p-1.5 rounded transition-colors" style={{ color: 'var(--text-secondary)' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--surface)'; e.currentTarget.style.color = 'var(--text-primary)'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'var(--text-secondary)'; }} title={t('notebook.clear')}>
-                            <Eraser size={16} />
-                        </button>
-                        <button onClick={() => navigator.clipboard.writeText(text)} className="p-1.5 rounded transition-colors" style={{ color: 'var(--text-secondary)' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--surface)'; e.currentTarget.style.color = 'var(--text-primary)'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'var(--text-secondary)'; }} title={t('notebook.copy')}>
-                            <Copy size={16} />
-                        </button>
+                    <div className="flex gap-1">
+                        <div title={t('notebook.clear')}>
+                            <CompactButton
+                                onClick={() => setText('')}
+                                variant="ghost"
+                                icon={<Eraser size={16} />}
+                                label=""
+                            />
+                        </div>
+                        <div title={t('notebook.copy')}>
+                            <CompactButton
+                                onClick={() => navigator.clipboard.writeText(text)}
+                                variant="ghost"
+                                icon={<Copy size={16} />}
+                                label=""
+                            />
+                        </div>
                     </div>
                 </>
             }
         >
 
             {/* Split View */}
-            <div className="flex h-full w-full overflow-hidden">
+            <div className="flex h-full w-full overflow-hidden gap-4 p-4">
                 {/* Input Area */}
-                <div className="flex-1 border-r relative overflow-y-auto h-full" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
+                <div className="flex-1 flex flex-col overflow-hidden rounded border" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
+                    <div className="flex justify-between items-center p-4 border-b" style={{ borderColor: 'var(--border)' }}>
+                        <h3 className="text-sm font-semibold" style={{ color: 'var(--text-secondary)' }}>{t('notebook.input')}</h3>
+                        <StatBadge value={text.length} label="chars" />
+                    </div>
                     <textarea
                         value={text}
                         onChange={(e) => setText(e.target.value)}
-                        className="w-full h-full bg-transparent p-6 font-mono text-base leading-relaxed focus:outline-none resize-none"
+                        className="flex-1 bg-transparent p-4 font-mono text-base leading-relaxed focus:outline-none resize-none overflow-y-auto"
                         style={{ color: 'var(--text-secondary)', caretColor: 'var(--accent)' }}
                         placeholder={t('notebook.placeholder')}
                         spellCheck={false}
                     />
-                    <div className="absolute bottom-4 right-4 text-[10px] font-mono px-2 py-1 rounded" style={{ color: 'var(--text-secondary)', backgroundColor: 'var(--background)' }}>
-                        {text.length} chars
-                    </div>
                 </div>
 
                 {/* Render Area */}
                 <div
                     ref={renderContainerRef}
-                    className={`flex-1 p-8 relative custom-scrollbar h-full ${scriptConfig?.direction === 'ttb' ? 'overflow-x-auto overflow-y-hidden' : 'overflow-y-auto'}`}
-                    style={{ backgroundColor: 'var(--background)' }}
+                    className={`flex-1 flex flex-col overflow-hidden rounded border custom-scrollbar ${scriptConfig?.direction === 'ttb' ? 'overflow-x-auto' : ''}`}
+                    style={{ backgroundColor: 'var(--background)', borderColor: 'var(--border)' }}
                 >
-                    <div className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-widest opacity-50" style={{ color: 'var(--text-secondary)' }}>
-                        {t('notebook.live_renderer')}
+                    <div className="flex justify-between items-center p-4 border-b" style={{ borderColor: 'var(--border)' }}>
+                        <h3 className="text-sm font-semibold" style={{ color: 'var(--text-secondary)' }}>{t('notebook.live_renderer')}</h3>
                     </div>
-                    {isScriptMode && scriptConfig ? (
-                        <div
-                            className="leading-loose break-words whitespace-pre-wrap transition-all duration-200 h-full"
-                            style={{ fontSize: `${fontSize}px`, direction: scriptConfig.direction === 'rtl' ? 'rtl' : 'ltr', color: 'var(--text-primary)', textAlign: scriptConfig.direction === 'rtl' ? 'right' : 'left' }}
-                        >
-                            <ConScriptText text={text} scriptConfig={scriptConfig} />
-                        </div>
-                    ) : (
-                        <div className="text-2xl leading-loose break-words whitespace-pre-wrap font-serif italic opacity-30 mt-10 text-center" style={{ color: 'var(--text-secondary)' }}>
-                            {text ? t('notebook.switch_prompt') : t('notebook.empty_sandbox')}
-                        </div>
-                    )}
+                    <div className="flex-1 p-4 overflow-y-auto">
+                        {isScriptMode && scriptConfig ? (
+                            <div
+                                className="leading-loose break-words whitespace-pre-wrap transition-all duration-200"
+                                style={{ fontSize: `${fontSize}px`, direction: scriptConfig.direction === 'rtl' ? 'rtl' : 'ltr', color: 'var(--text-primary)', textAlign: scriptConfig.direction === 'rtl' ? 'right' : 'left' }}
+                            >
+                                <ConScriptText text={text} scriptConfig={scriptConfig} />
+                            </div>
+                        ) : (
+                            <div className="text-2xl leading-loose break-words whitespace-pre-wrap font-serif italic opacity-30 text-center" style={{ color: 'var(--text-secondary)' }}>
+                                {text ? t('notebook.switch_prompt') : t('notebook.empty_sandbox')}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </ViewLayout>
