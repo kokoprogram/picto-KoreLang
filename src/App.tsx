@@ -111,6 +111,10 @@ const AppContent: React.FC = () => {
           customTheme: { ...current, [payload.colorKey]: payload.colorValue },
         });
       },
+      navigateTo: (payload) => {
+        if (!payload?.view) return;
+        project.setCurrentView(payload.view as ViewState);
+      },
       toggleScriptMode: () => setIsScriptMode((s) => !s),
       zoomIn: () => setZoomLevel((z) => Math.min(z + 10, 150)),
       zoomOut: () => setZoomLevel((z) => Math.max(z - 10, 50)),
@@ -123,6 +127,7 @@ const AppContent: React.FC = () => {
     isConsoleOpen,
     project.settings,
     project.updateSettings,
+    project.setCurrentView,
   ]);
 
   // Setup keyboard shortcuts
@@ -165,6 +170,7 @@ const AppContent: React.FC = () => {
               isOpen={isConsoleOpen}
               loadingAI={project.settings.enableAI}
               onClose={() => setIsConsoleOpen(false)}
+              currentView={project.currentView as ViewState}
             />
           )}
         </main>

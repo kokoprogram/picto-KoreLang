@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useTranslation } from "../i18n";
 import { X, ChevronDown, ChevronUp, Terminal } from "lucide-react";
+import { ViewState } from "../types";
 import ConsoleConfig from "./ConsoleConfig";
 
 interface ConsoleViewProps {
@@ -8,6 +9,7 @@ interface ConsoleViewProps {
   loadingAI: boolean;
   onClose: () => void;
   author?: string;
+  currentView?: ViewState;
 }
 
 const ConsoleView: React.FC<ConsoleViewProps> = ({
@@ -15,6 +17,7 @@ const ConsoleView: React.FC<ConsoleViewProps> = ({
   loadingAI,
   onClose,
   author,
+  currentView,
 }) => {
   const { t } = useTranslation();
 
@@ -307,6 +310,7 @@ const ConsoleView: React.FC<ConsoleViewProps> = ({
             <ConsoleConfig
               loadingAI={loadingAI}
               author={author}
+              currentView={currentView}
             />
           </div>
         )}

@@ -1,6 +1,6 @@
 import { Info, Zap } from "lucide-react";
 import React, { useState, useEffect, useRef } from "react";
-import { LogEntry } from "../types";
+import { LogEntry, ViewState } from "../types";
 import { useTranslation } from "../i18n";
 import { useCommandExecutor, resolveModal } from "../state/commandStore";
 
@@ -16,9 +16,10 @@ const TERMINAL_HEADER = `
 interface ConsoleConfigProps {
   loadingAI: boolean;
   author?: string;
+  currentView?: ViewState;
 }
 
-const ConsoleConfig: React.FC<ConsoleConfigProps> = ({ loadingAI, author = "user" }) => {
+const ConsoleConfig: React.FC<ConsoleConfigProps> = ({ loadingAI, author = "user", currentView }) => {
   const { t } = useTranslation();
   const [history, setHistory] = useState<LogEntry[]>([]);
   const [input, setInput] = useState("");
@@ -282,31 +283,48 @@ const ConsoleConfig: React.FC<ConsoleConfigProps> = ({ loadingAI, author = "user
       
       if (category && COMMAND_CATEGORIES[category as keyof typeof COMMAND_CATEGORIES]) {
         const cat = COMMAND_CATEGORIES[category as keyof typeof COMMAND_CATEGORIES];
-        addLog("output", `=== ${cat.name.toUpperCase()} ===`);
+        addLog("output", "");
+        addLog("output", `[${category.toUpperCase()}]`, (
+          <span style={{ color: 'var(--primary)' }}>
+            [{category.toUpperCase()}]
+          </span>
+        ));
         cat.commands.forEach(c => {
-          addLog("output", `  ${category} ${c.cmd} ${c.args}`);
+          addLog("output", `  ${category} ${c.cmd} ${c.args}`, (
+            <span>
+              <span style={{ color: 'var(--primary)' }}>{category}</span>
+              <span style={{ color: 'var(--warning)' }}> {c.cmd}</span>
+              <span style={{ color: 'var(--info)' }}> {c.args}</span>
+            </span>
+          ));
           addLog("info", `    ${c.desc}`);
         });
+        addLog("output", "");
       } else if (category) {
         addLog("error", `Unknown category: ${category}`);
         addLog("info", `Available categories: ${Object.keys(COMMAND_CATEGORIES).join(', ')}`);
       } else {
-        addLog("output", "KORELANG CONSOLE - COMMAND REFERENCE");
-        addLog("output", "Use: help -cat <category> for detailed help\n");
-        addLog("output", "[Root Commands]");
+        // Display only root commands
+        addLog("output", "");
+        addLog("output", "KORELANG CONSOLE - ROOT COMMANDS", (
+          <span style={{ color: 'var(--primary)' }}>
+            KORELANG CONSOLE - ROOT COMMANDS
+          </span>
+        ));
+        addLog("output", "");
         ROOT_COMMANDS.forEach(c => {
-          addLog("output", `  ${c.cmd} ${c.args} - ${c.desc}`);
+          addLog("output", `  ${c.cmd} ${c.args}`, (
+            <span>
+              <span style={{ color: 'var(--warning)' }}>{c.cmd}</span>
+              <span style={{ color: 'var(--info)' }}> {c.args}</span>
+            </span>
+          ));
+          addLog("info", `    ${c.desc}`);
         });
         addLog("output", "");
-        addLog("output", "[Categories]");
-        Object.entries(COMMAND_CATEGORIES).forEach(([key, cat]) => {
-          addLog("output", `  ${key} - ${cat.name}`);
-          cat.commands.forEach(c => {
-            addLog("output", `    ${key} ${c.cmd} ${c.args}`);
-          });
-        });
+        addLog("info", `Type 'help -cat <category>' to see available categories:`);
+        addLog("info", `Available: ${CATEGORY_NAMES.map(c => `${c}`).join(', ')}`);
         addLog("output", "");
-        addLog("info", `Categories: ${Object.keys(COMMAND_CATEGORIES).join(', ')}`);
       }
       return;
     }
@@ -314,6 +332,20 @@ const ConsoleConfig: React.FC<ConsoleConfigProps> = ({ loadingAI, author = "user
     if (cmd === "cd") {
       const section = args[0]?.toLowerCase();
       const validSections = ["dashboard", "lexicon", "phonology", "grammar", "morphology", "genevolve", "genword", "script", "notebook", "console"];
+      
+      // Map user input to ViewState
+      const viewMap: Record<string, string> = {
+        "dashboard": "DASHBOARD",
+        "lexicon": "LEXICON",
+        "phonology": "PHONOLOGY",
+        "grammar": "GRAMMAR",
+        "morphology": "GRAMMAR",  // morphology is part of grammar view
+        "genevolve": "GENEVOLVE",
+        "genword": "GENEVOLVE",   // genword is part of genevolve view
+        "script": "SCRIPT",
+        "notebook": "NOTEBOOK",
+        "console": "CONSOLE"
+      };
 
       if (!section) {
         addLog("error", "Specify section to navigate to.");
@@ -322,12 +354,21 @@ const ConsoleConfig: React.FC<ConsoleConfigProps> = ({ loadingAI, author = "user
       }
 
       if (!validSections.includes(section)) {
-        addLog("error", `Unknown section: ${section}`);
+        addLog("error", `${section} not found`);
         addLog("info", `Available sections: ${validSections.join(', ')}`);
         return;
       }
 
-      executeCommand("navigateTo", { view: section });
+      // Get the view to navigate to
+      const targetView = viewMap[section];
+
+      // Check if already on this view
+      if (currentView === targetView) {
+        addLog("warning", `Already on ${section}`);
+        return;
+      }
+
+      executeCommand("navigateTo", { view: targetView });
       addLog("success", `Navigated to: ${section}`);
       return;
     }
@@ -497,6 +538,8 @@ const ConsoleConfig: React.FC<ConsoleConfigProps> = ({ loadingAI, author = "user
             className={`flex flex-col ${
               log.type === "error"
                 ? "text-red-500"
+                : log.type === "warning"
+                ? "text-[var(--warning)]"
                 : log.type === "success"
                 ? "text-emerald-400"
                 : log.type === "command"

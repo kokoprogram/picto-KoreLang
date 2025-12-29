@@ -34,7 +34,7 @@ export interface LexiconEntry {
 }
 
 export interface LogEntry {
-  type: 'command' | 'success' | 'error' | 'info' | 'output';
+  type: 'command' | 'success' | 'error' | 'info' | 'output' | 'warning';
   content: string;
   timestamp: string;
   component?: React.ReactNode;
