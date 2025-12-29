@@ -61,7 +61,7 @@ const Notebook: React.FC<NotebookProps> = ({ scriptConfig, isScriptMode, text, s
             {/* Split View */}
             <div className="flex h-full w-full overflow-hidden">
                 {/* Input Area */}
-                <div className="flex-1 border-r relative" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
+                <div className="flex-1 border-r relative overflow-y-auto h-full" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
                     <textarea
                         value={text}
                         onChange={(e) => setText(e.target.value)}
@@ -78,7 +78,7 @@ const Notebook: React.FC<NotebookProps> = ({ scriptConfig, isScriptMode, text, s
                 {/* Render Area */}
                 <div
                     ref={renderContainerRef}
-                    className={`flex-1 p-8 relative custom-scrollbar ${scriptConfig?.direction === 'ttb' ? 'overflow-x-auto overflow-y-hidden' : 'overflow-y-auto'}`}
+                    className={`flex-1 p-8 relative custom-scrollbar h-full ${scriptConfig?.direction === 'ttb' ? 'overflow-x-auto overflow-y-hidden' : 'overflow-y-auto'}`}
                     style={{ backgroundColor: 'var(--background)' }}
                 >
                     <div className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-widest opacity-50" style={{ color: 'var(--text-secondary)' }}>
