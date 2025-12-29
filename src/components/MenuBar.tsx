@@ -183,10 +183,9 @@ const MenuBar: React.FC<MenuBarProps> = ({
         return t("settings.dark");
       case "cappuccino":
         return t("settings.cappuccino");
-      case "tokyo-night":
-        return t("settings.tokyo");
       default:
-        return t("settings.dark");
+        // Fallback: prettify theme key (kebab-case → Title Case)
+        return settings.theme.split('-').map(w => w[0]?.toUpperCase() + w.slice(1)).join(' ');
     }
   };
 

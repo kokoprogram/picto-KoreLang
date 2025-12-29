@@ -174,7 +174,7 @@ export interface CustomTheme {
 }
 
 export interface AppSettings {
-  theme: 'dark' | 'cappuccino' | 'tokyo-night' | 'custom';
+  theme: string; // Allow any named theme preset or 'custom'
   customTheme?: CustomTheme;
   autoSave: boolean;
   showLineNumbers: boolean;
