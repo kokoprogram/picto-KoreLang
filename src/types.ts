@@ -1,3 +1,195 @@
+// Enum de tous les phonèmes (inspiré de Phoneme.cs)
+export enum PhonemeType {
+  // Consonants
+  VoicedBilabialNasal = "VoicedBilabialNasal",
+  VoicedLabiodentalNasal = "VoicedLabiodentalNasal",
+  VoicedAlveolarNasal = "VoicedAlveolarNasal",
+  VoicedRetroflexNasal = "VoicedRetroflexNasal",
+  VoicedPalatalNasal = "VoicedPalatalNasal",
+  VoicedVelarNasal = "VoicedVelarNasal",
+  VoicedUvularNasal = "VoicedUvularNasal",
+  VoicelessBilabialPlosive = "VoicelessBilabialPlosive",
+  VoicedBilabialPlosive = "VoicedBilabialPlosive",
+  VoicelessAlveolarPlosive = "VoicelessAlveolarPlosive",
+  VoicedAlveolarPlosive = "VoicedAlveolarPlosive",
+  VoicelessRetroflexPlosive = "VoicelessRetroflexPlosive",
+  VoicedRetroflexPlosive = "VoicedRetroflexPlosive",
+  VoicelessPalatalPlosive = "VoicelessPalatalPlosive",
+  VoicedPalatalPlosive = "VoicedPalatalPlosive",
+  VoicelessVelarPlosive = "VoicelessVelarPlosive",
+  VoicedVelarPlosive = "VoicedVelarPlosive",
+  VoicelessUvularPlosive = "VoicelessUvularPlosive",
+  VoicedUvularPlosive = "VoicedUvularPlosive",
+  GlottalStop = "GlottalStop",
+  VoicelessBilabialFricative = "VoicelessBilabialFricative",
+  VoicedBilabialFricative = "VoicedBilabialFricative",
+  VoicelessLabiodentalFricative = "VoicelessLabiodentalFricative",
+  VoicedLabiodentalFricative = "VoicedLabiodentalFricative",
+  VoicelessDentalFricative = "VoicelessDentalFricative",
+  VoicedDentalFricative = "VoicedDentalFricative",
+  VoicelessAlveolarFricative = "VoicelessAlveolarFricative",
+  VoicedAlveolarFricative = "VoicedAlveolarFricative",
+  VoicelessPostalveolarFricative = "VoicelessPostalveolarFricative",
+  VoicedPostalveolarFricative = "VoicedPostalveolarFricative",
+  VoicelessRetroflexFricative = "VoicelessRetroflexFricative",
+  VoicedRetroflexFricative = "VoicedRetroflexFricative",
+  VoicelessPalatalFricative = "VoicelessPalatalFricative",
+  VoicedPalatalFricative = "VoicedPalatalFricative",
+  VoicelessVelarFricative = "VoicelessVelarFricative",
+  VoicedVelarFricative = "VoicedVelarFricative",
+  VoicelessUvularFricative = "VoicelessUvularFricative",
+  VoicedUvularFricative = "VoicedUvularFricative",
+  VoicelessPharyngealFricative = "VoicelessPharyngealFricative",
+  VoicedPharyngealFricative = "VoicedPharyngealFricative",
+  VoicelessGlottalFricative = "VoicelessGlottalFricative",
+  VoicedGlottalFricative = "VoicedGlottalFricative",
+  LabiodentalApproximant = "LabiodentalApproximant",
+  AlveolarApproximant = "AlveolarApproximant",
+  RetroflexApproximant = "RetroflexApproximant",
+  PalatalApproximant = "PalatalApproximant",
+  VelarApproximant = "VelarApproximant",
+  BilabialTrill = "BilabialTrill",
+  AlveolarTrill = "AlveolarTrill",
+  UvularTrill = "UvularTrill",
+  AlveolarTap = "AlveolarTap",
+  RetroflexTap = "RetroflexTap",
+  VoicelessAlveolarLateralFricative = "VoicelessAlveolarLateralFricative",
+  VoicedAlveolarLateralFricative = "VoicedAlveolarLateralFricative",
+  AlveolarLateralApproximant = "AlveolarLateralApproximant",
+  RetroflexLateralApproximant = "RetroflexLateralApproximant",
+  PalatalLateralApproximant = "PalatalLateralApproximant",
+  VelarLateralApproximant = "VelarLateralApproximant",
+  // Vowels
+  CloseFrontUnroundedVowel = "CloseFrontUnroundedVowel",
+  CloseFrontRoundedVowel = "CloseFrontRoundedVowel",
+  CloseCentralUnroundedVowel = "CloseCentralUnroundedVowel",
+  CloseCentralRoundedVowel = "CloseCentralRoundedVowel",
+  CloseBackUnroundedVowel = "CloseBackUnroundedVowel",
+  CloseBackRoundedVowel = "CloseBackRoundedVowel",
+  NearCloseNearFrontUnroundedVowel = "NearCloseNearFrontUnroundedVowel",
+  NearCloseNearFrontRoundedVowel = "NearCloseNearFrontRoundedVowel",
+  NearCloseNearBackRoundedVowel = "NearCloseNearBackRoundedVowel",
+  CloseMidFrontUnroundedVowel = "CloseMidFrontUnroundedVowel",
+  CloseMidFrontRoundedVowel = "CloseMidFrontRoundedVowel",
+  MidCentralVowel = "MidCentralVowel",
+  OpenMidFrontUnroundedVowel = "OpenMidFrontUnroundedVowel",
+  OpenMidFrontRoundedVowel = "OpenMidFrontRoundedVowel",
+  OpenMidBackUnroundedVowel = "OpenMidBackUnroundedVowel",
+  OpenMidBackRoundedVowel = "OpenMidBackRoundedVowel",
+  NearOpenFrontUnroundedVowel = "NearOpenFrontUnroundedVowel",
+  OpenFrontUnroundedVowel = "OpenFrontUnroundedVowel",
+  OpenBackUnroundedVowel = "OpenBackUnroundedVowel",
+  OpenBackRoundedVowel = "OpenBackRoundedVowel",
+  // Duplicates and variants (as in C#)
+  CloseFrontUnrounded = "CloseFrontUnrounded",
+  CloseFrontRounded = "CloseFrontRounded",
+  CloseCentralUnrounded = "CloseCentralUnrounded",
+  CloseCentralRounded = "CloseCentralRounded",
+  CloseBackUnrounded = "CloseBackUnrounded",
+  CloseBackRounded = "CloseBackRounded",
+  NearCloseFrontUnrounded = "NearCloseFrontUnrounded",
+  NearCloseFrontRounded = "NearCloseFrontRounded",
+  NearCloseBackRounded = "NearCloseBackRounded",
+  CloseMidFrontUnrounded = "CloseMidFrontUnrounded",
+  CloseMidFrontRounded = "CloseMidFrontRounded",
+  CloseMidCentralUnrounded = "CloseMidCentralUnrounded",
+  CloseMidCentralRounded = "CloseMidCentralRounded",
+  CloseMidBackUnrounded = "CloseMidBackUnrounded",
+  CloseMidBackRounded = "CloseMidBackRounded",
+  MidCentral = "MidCentral",
+  OpenMidFrontUnrounded = "OpenMidFrontUnrounded",
+  OpenMidFrontRounded = "OpenMidFrontRounded",
+  OpenMidCentralUnrounded = "OpenMidCentralUnrounded",
+  OpenMidCentralRounded = "OpenMidCentralRounded",
+  OpenMidBackUnrounded = "OpenMidBackUnrounded",
+  OpenMidBackRounded = "OpenMidBackRounded",
+  NearOpenFrontUnrounded = "NearOpenFrontUnrounded",
+  NearOpenCentral = "NearOpenCentral",
+  OpenFrontUnrounded = "OpenFrontUnrounded",
+  OpenFrontRounded = "OpenFrontRounded",
+  OpenBackUnrounded = "OpenBackUnrounded",
+  OpenBackRounded = "OpenBackRounded",
+  VoicedAlveolarLateralApproximant = "VoicedAlveolarLateralApproximant",
+  VoicedRetroflexLateralApproximant = "VoicedRetroflexLateralApproximant",
+  VoicedLabioDentalApproximant = "VoicedLabioDentalApproximant",
+  VoicedAlveolarApproximant = "VoicedAlveolarApproximant",
+  VoicedRetroflexApproximant = "VoicedRetroflexApproximant",
+  VoicedPalatalApproximant = "VoicedPalatalApproximant",
+  VoicedVelarApproximant = "VoicedVelarApproximant",
+  VoicedBilabialTrill = "VoicedBilabialTrill",
+  VoicedAlveolarTrill = "VoicedAlveolarTrill",
+  VoicedUvularTrill = "VoicedUvularTrill",
+  VoicedAlveolarTap = "VoicedAlveolarTap",
+  VoicedRetroflexTap = "VoicedRetroflexTap",
+  VoicedPalatalLateralApproximant = "VoicedPalatalLateralApproximant",
+  VoicedVelarLateralApproximant = "VoicedVelarLateralApproximant",
+  VoicedPostAlveolarSibilantFricative = "VoicedPostAlveolarSibilantFricative",
+  VoicelessPostAlveolarSibilantFricative = "VoicelessPostAlveolarSibilantFricative",
+  VoicedLabioDentalFricative = "VoicedLabioDentalFricative",
+  VoicelessLabioDentalFricative = "VoicelessLabioDentalFricative",
+  VoicelessGlottalPlosive = "VoicelessGlottalPlosive",
+  VoicedLabioDentalNasal = "VoicedLabioDentalNasal",
+  Voicedlabiodentalflap = "Voicedlabiodentalflap",
+  VoicedLabioVelarApproximant = "VoicedLabioVelarApproximant"
+}
+
+// Diacritic/Phoneme modification enums (inspirés de Diacritic.cs)
+export enum ArticulationPlaceModification {
+  Dental = "Dental",
+  Apical = "Apical",
+  Laminal = "Laminal",
+  Linguolabial = "Linguolabial",
+  Labialized = "Labialized",
+  Palatalized = "Palatalized",
+  Velarized = "Velarized",
+  Pharyngealized = "Pharyngealized",
+  Glottalized = "Glottalized",
+  None = "None"
+}
+
+export enum RoundnessModification {
+  MoreRounded = "MoreRounded",
+  LessRounded = "LessRounded",
+  None = "None"
+}
+
+export enum TonguePositionModification {
+  Advanced = "Advanced",
+  Retracted = "Retracted",
+  Centralized = "Centralized",
+  MidCentralized = "MidCentralized",
+  None = "None"
+}
+
+export enum PhonationModification {
+  Voiceless = "Voiceless",
+  Voiced = "Voiced",
+  BreathyVoiced = "BreathyVoiced",
+  CreakyVoiced = "CreakyVoiced",
+  None = "None"
+}
+
+export enum OronasalProcessModification {
+  Aspirated = "Aspirated",
+  Nasalized = "Nasalized",
+  NasalRelease = "NasalRelease",
+  LateralRelease = "LateralRelease",
+  NoAudibleRelease = "NoAudibleRelease"
+}
+
+export enum TongueRootPositionModification {
+  AdvancedTongueRoot = "AdvancedTongueRoot",
+  RetractedTongueRoot = "RetractedTongueRoot",
+  Raised = "Raised",
+  Lowered = "Lowered",
+  None = "None"
+}
+
+export enum SyllabicRoleModification {
+  Syllabic = "Syllabic",
+  NonSyllabic = "NonSyllabic",
+  None = "None"
+}
 
 import React from 'react';
 
