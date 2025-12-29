@@ -11,7 +11,7 @@ interface Props {
 const LexiconLetterIndicator: React.FC<Props> = ({ letter, count, isConflictGroup = false, onClick }) => {
   const [hovered, setHovered] = useState(false);
   const baseStyle = isConflictGroup
-    ? { backgroundColor: 'rgba(255, 0, 0, 0.08)', color: 'var(--error)' }
+    ? { backgroundColor: 'rgb(from var(--error) r g b / 0.08)', color: 'var(--error)' }
     : { backgroundColor: 'var(--surface)', color: 'var(--text-secondary)' };
 
   return (

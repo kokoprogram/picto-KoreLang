@@ -31,11 +31,11 @@ const WhatsNewModal: React.FC = () => {
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <div
-                className="absolute inset-0 bg-black/20 backdrop-blur-[4px] animate-in fade-in duration-500"
+                className="absolute inset-0 bg-[rgb(from var(--background) r g b / 0.2)] backdrop-blur-[4px] animate-in fade-in duration-500"
                 onClick={() => ui.close('whatsNew')}
             />
 
-            <div className="relative bg-[var(--surface)] border border-[var(--accent)]/30 rounded-3xl w-full max-w-sm overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.8)] animate-in zoom-in-95 duration-500">
+            <div className="relative bg-[var(--surface)] border border-[var(--accent)]/30 rounded-3xl w-full max-w-sm overflow-hidden shadow-[0_0_80px_var(--shadow-dark)] animate-in zoom-in-95 duration-500">
                 <div className="p-8 space-y-6">
                     <div className="space-y-2">
                         <div className="w-12 h-12 rounded-2xl bg-[var(--accent)]/20 flex items-center justify-center mb-4">

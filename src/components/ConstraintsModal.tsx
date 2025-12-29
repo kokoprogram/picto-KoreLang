@@ -157,7 +157,7 @@ const ConstraintsModal: React.FC = () => {
                   ? ''
                   : ''
               }`}
-              style={activeTab === tab.id ? { borderColor: 'var(--accent)', color: 'var(--accent)', backgroundColor: 'rgba(var(--accent-rgb), 0.1)' } : { borderColor: 'transparent', color: 'var(--text-secondary)' }}
+              style={activeTab === tab.id ? { borderColor: 'var(--accent)', color: 'var(--accent)', backgroundColor: 'rgb(from var(--accent) r g b / 0.1)' } : { borderColor: 'transparent', color: 'var(--text-secondary)' }}
               onMouseEnter={(e) => { if (activeTab !== tab.id) { e.currentTarget.style.backgroundColor = 'var(--surface)'; e.currentTarget.style.color = 'var(--text-primary)'; } }}
               onMouseLeave={(e) => { if (activeTab !== tab.id) { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'var(--text-secondary)'; } }}
             >
@@ -360,7 +360,10 @@ const ConstraintsModal: React.FC = () => {
                         {renderGlyphPreview(seq)}
                         <button
                           onClick={() => removeBanned(seq)}
-                          className="hover:text-white"
+                          className="transition-colors"
+                          style={{ color: 'var(--text-secondary)' }}
+                          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-primary)'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; }}
                         >
                           <X size={12} />
                         </button>
@@ -461,7 +464,10 @@ const ConstraintsModal: React.FC = () => {
                           onClick={() =>
                             removeConditionalRule("mustStartWith", idx)
                           }
-                          className="ml-1 hover:text-white"
+                          className="ml-1 transition-colors"
+                          style={{ color: 'var(--text-secondary)' }}
+                          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-primary)'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; }}
                         >
                           <X size={12} />
                         </button>
@@ -531,7 +537,10 @@ const ConstraintsModal: React.FC = () => {
                           onClick={() =>
                             removeConditionalRule("mustEndWith", idx)
                           }
-                          className="ml-1 hover:text-white"
+                          className="ml-1 transition-colors"
+                          style={{ color: 'var(--text-secondary)' }}
+                          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-primary)'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; }}
                         >
                           <X size={12} />
                         </button>

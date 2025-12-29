@@ -9,6 +9,7 @@ interface CompactButtonProps {
   color?: string;
   className?: string;
   hideLabel?: boolean;
+  title?: string;
 }
 
 /**
@@ -69,7 +70,8 @@ export const CompactButton = React.memo<CompactButtonProps>(({
   variant = 'solid',
   color = 'var(--accent)',
   className = '',
-  hideLabel = false
+  hideLabel = false,
+  title
 }) => {
   const getButtonStyles = () => {
     if (disabled) {
@@ -111,6 +113,7 @@ export const CompactButton = React.memo<CompactButtonProps>(({
     <button
       onClick={onClick}
       disabled={disabled}
+      title={title}
       className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold transition-colors disabled:cursor-not-allowed hover:opacity-90 ${!hideLabel && label ? '' : 'justify-center'} ${className}`}
       style={getButtonStyles()}
     >

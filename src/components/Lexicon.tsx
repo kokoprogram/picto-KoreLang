@@ -584,7 +584,7 @@ const Lexicon: React.FC<LexiconProps> = ({
                         onClick={toggleConflictMode}
                         className="p-2.5 rounded-lg border transition-all flex items-center gap-2"
                         style={conflictMode !== 'HIDDEN'
-                            ? { backgroundColor: 'rgba(255, 118, 142, 0.15)', borderColor: 'var(--error)', color: 'var(--error)' }
+                            ? { backgroundColor: 'rgb(from var(--error) r g b / 0.15)', borderColor: 'var(--error)', color: 'var(--error)' }
                             : { backgroundColor: 'var(--surface)', borderColor: 'var(--divider)', color: 'var(--text-secondary)' }}
                         title={conflictMode === 'HIDDEN' ? t('lexicon.view_mode_pinned') : t('lexicon.view_mode_hide')}
                     >
@@ -627,7 +627,13 @@ const Lexicon: React.FC<LexiconProps> = ({
                     <p>{t('lexicon.ai_requires_key') || 'AI Generation requires an API Key.'} <a href="https://github.com/zRinexD/KoreLang/" target="_blank" rel="noopener noreferrer" className="font-bold underline">{t('lexicon.docs') || 'Documentation'}</a>.</p>
                 </div>
             )}
-            <button onClick={() => setActiveTab('BROWSE')} className="flex items-center gap-2 text-sm font-bold text-neutral-400 hover:text-white">
+            <button
+                onClick={() => setActiveTab('BROWSE')}
+                className="flex items-center gap-2 text-sm font-bold text-neutral-400"
+                style={{ color: 'var(--text-secondary)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-primary)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; }}
+            >
                 <ArrowRight className={direction === 'rtl' ? '' : 'rotate-180'} size={16} /> {t('common.cancel')}
             </button>
         </div>
@@ -721,11 +727,11 @@ const Lexicon: React.FC<LexiconProps> = ({
             </div>
 
             {entryToDelete && dependentsWarning.length > 0 && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-[110]">
+                <div className="fixed inset-0 bg-[rgb(from var(--background) r g b / 0.6)] backdrop-blur-sm flex items-center justify-center p-4 z-[110]">
                     <div className="w-full max-w-lg overflow-hidden duration-200 border shadow-2xl rounded-xl animate-in fade-in zoom-in" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--error)' }}>
                         <div className="p-6">
                             <div className="flex items-start gap-4">
-                                <div className="p-3 rounded-full shrink-0" style={{ backgroundColor: 'rgba(220, 38, 38, 0.15)' }}><ShieldAlert style={{ color: 'var(--error)' }} size={32} /></div>
+                                <div className="p-3 rounded-full shrink-0" style={{ backgroundColor: 'rgb(from var(--error) r g b / 0.15)' }}><ShieldAlert style={{ color: 'var(--error)' }} size={32} /></div>
                                 <div>
                                     <h3 className="mb-2 text-xl font-bold" style={{ color: 'var(--text-primary)' }}>{t('integrity.title')}</h3>
                                     <p className="mb-4" style={{ color: 'var(--text-secondary)' }}>{t('integrity.warning')}</p>
@@ -746,7 +752,7 @@ const Lexicon: React.FC<LexiconProps> = ({
             )}
 
             {showSimpleDeleteConfirm && entryToDelete && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-[110]">
+                <div className="fixed inset-0 bg-[rgb(from var(--background) r g b / 0.6)] backdrop-blur-sm flex items-center justify-center p-4 z-[110]">
                     <div className="w-full max-w-md duration-200 border shadow-2xl rounded-xl animate-in fade-in zoom-in" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
                         <div className="p-6">
                             <div className="flex items-start gap-4">
@@ -766,7 +772,7 @@ const Lexicon: React.FC<LexiconProps> = ({
             )}
 
             {isModalOpen && (
-                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-[100]">
+                <div className="fixed inset-0 bg-[rgb(from var(--background) r g b / 0.7)] backdrop-blur-sm flex items-center justify-center p-4 z-[100]">
                     {/* FLOATING IPA KEYBOARD - OMNIPRESENT */}
                     {(showIPAKeyboard || pinIPAKeyboard) && (
                         <div className={`absolute z-[120] rounded-xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300 ${pinIPAKeyboard ? 'right-4 top-20 bottom-20 w-64' : 'bottom-10 left-1/2 -translate-x-1/2 w-[600px] h-[300px]'}`} style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)', border: '1px solid' }}>
@@ -820,7 +826,7 @@ const Lexicon: React.FC<LexiconProps> = ({
                         </div>
                         <div className="p-6 space-y-4 overflow-y-auto" style={{ backgroundColor: 'var(--surface)' }}>
                             {validationErrors.length > 0 && (
-                                <div className="flex items-start gap-3 p-3 border rounded-lg" style={{ backgroundColor: 'rgba(220, 38, 38, 0.15)', borderColor: 'var(--error)' }}>
+                                <div className="flex items-start gap-3 p-3 border rounded-lg" style={{ backgroundColor: 'rgb(from var(--error) r g b / 0.15)', borderColor: 'var(--error)' }}>
                                     <AlertOctagon style={{ color: 'var(--error)' }} className="shrink-0 mt-0.5" size={16} />
                                     <div>
                                         <div className="mb-1 text-xs font-bold uppercase" style={{ color: 'var(--error)' }}>{t('val.errors_title')}</div>

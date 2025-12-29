@@ -25,7 +25,7 @@ export const MonoToggle: React.FC<MonoToggleProps> = ({ active, onClick, icon, l
                 backgroundColor: active ? activeBg : baseBg,
                 color: active ? 'var(--indicator)' : 'var(--text-secondary)',
                 borderColor: active ? activeBorder : inactiveBorder,
-                boxShadow: active ? '0 0 10px rgba(168, 85, 247, 0.25)' : 'none'
+                boxShadow: active ? '0 0 10px rgb(from var(--indicator) r g b / 0.25)' : 'none'
             }}
         >
             {icon}

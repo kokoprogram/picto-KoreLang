@@ -326,10 +326,22 @@ const PhonologyEditor: React.FC<PhonologyEditorProps> = ({ data, setData, enable
                             {t('phonology.ai_review')}
                         </h3>
                         <div className="flex items-center gap-2">
-                            <button onClick={(e) => { e.stopPropagation(); setIsPreviewMinimized(!isPreviewMinimized); }} className="text-neutral-500 hover:text-white">
+                            <button
+                                onClick={(e) => { e.stopPropagation(); setIsPreviewMinimized(!isPreviewMinimized); }}
+                                className="text-neutral-500"
+                                style={{ color: 'var(--text-secondary)' }}
+                                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-primary)'; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; }}
+                            >
                                 {isPreviewMinimized ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                             </button>
-                            <button onClick={(e) => { e.stopPropagation(); setShowPreview(false); }} className="text-neutral-500 hover:text-white">
+                            <button
+                                onClick={(e) => { e.stopPropagation(); setShowPreview(false); }}
+                                className="text-neutral-500"
+                                style={{ color: 'var(--text-secondary)' }}
+                                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-primary)'; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; }}
+                            >
                                 <X size={16} />
                             </button>
                         </div>

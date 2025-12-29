@@ -17,7 +17,7 @@ const AboutModal: React.FC = () => {
             maxWidth="max-w-md"
         >
             <div className="space-y-6 text-center">
-                <div className="flex items-center justify-center w-24 h-24 mx-auto border rounded-2xl" style={{ backgroundColor: 'rgba(var(--accent-rgb), 0.2)', borderColor: 'var(--accent)' }}>
+                <div className="flex items-center justify-center w-24 h-24 mx-auto border rounded-2xl" style={{ backgroundColor: 'rgb(from var(--accent) r g b / 0.2)', borderColor: 'var(--accent)' }}>
                     <span className="text-4xl font-black" style={{ color: 'var(--accent)' }}>KL</span>
                 </div>
 

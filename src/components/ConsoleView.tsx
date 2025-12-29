@@ -216,8 +216,10 @@ const ConsoleView: React.FC<ConsoleViewProps> = ({
   return (
     <div className="bottom-0 left-0 right-0 flex-none">
       <div
-        className="relative bg-[#1e1e1e] border-t border-white/10 shadow-2xl flex flex-col"
+        className="relative border-t shadow-2xl flex flex-col"
         style={{
+          backgroundColor: 'var(--surface)',
+          borderColor: 'rgb(from var(--text-primary) r g b / 0.1)',
           height,
           transition: isResizing
             ? "none"
@@ -237,7 +239,7 @@ const ConsoleView: React.FC<ConsoleViewProps> = ({
         <div className="h-6 bg-[var(--surface)] border-b border-neutral-700 flex items-center justify-between px-4 text-xs text-[var(--text-secondary)] relative">
           <div
             className="absolute inset-0 pointer-events-none"
-            style={{ backgroundColor: "rgba(255,255,255,0.03)" }}
+            style={{ backgroundColor: 'rgb(from var(--text-primary) r g b / 0.03)' }}
           />
           <h2 className="flex items-center gap-2 text-xs font-bold text-[var(--text-secondary)] relative z-10">
             <Terminal size={16} className="text-[var(--text-secondary)]" />
@@ -280,7 +282,10 @@ const ConsoleView: React.FC<ConsoleViewProps> = ({
                   setIsMinimized(false);
                 }
               }}
-              className="p-1 transition-colors rounded-lg hover:bg-white/10 text-neutral-400 hover:text-white"
+              className="p-1 transition-colors rounded-lg"
+              style={{ color: 'var(--text-secondary)', backgroundColor: 'transparent' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgb(from var(--text-primary) r g b / 0.1)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
               aria-label={isMinimized ? "Restore console" : "Minimize console"}
             >
               {isMinimized ? (
@@ -292,7 +297,10 @@ const ConsoleView: React.FC<ConsoleViewProps> = ({
 
             <button
               onClick={onClose}
-              className="p-1 transition-colors rounded-lg hover:bg-white/10 text-neutral-400 hover:text-white"
+              className="p-1 transition-colors rounded-lg"
+              style={{ color: 'var(--text-secondary)', backgroundColor: 'transparent' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgb(from var(--text-primary) r g b / 0.1)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
             >
               <X size={10} />
             </button>

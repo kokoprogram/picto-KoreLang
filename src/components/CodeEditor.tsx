@@ -111,7 +111,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange, language = 'bn
       
       {/* Status Bar / Footer for the Editor */}
       {/* CHANGED: right-4 -> end-4 for RTL positioning */}
-      <div className="absolute bottom-2 end-4 bg-slate-800/80 backdrop-blur text-[10px] text-slate-400 px-2 py-0.5 rounded border border-slate-700 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+      <div
+        className="absolute bottom-2 end-4 backdrop-blur text-[10px] px-2 py-0.5 rounded border pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"
+        style={{ backgroundColor: 'rgb(from var(--surface) r g b / 0.8)', borderColor: 'var(--border)', color: 'var(--text-secondary)' }}
+      >
         BNF MODE
       </div>
     </div>

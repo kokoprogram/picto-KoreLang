@@ -498,11 +498,11 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({ scriptConfig, setScriptConf
                         </Card>
                     </div>
 
-                    <div className="relative w-[400px] h-[400px] bg-neutral-900/40 rounded-xl border border-neutral-800/50 shadow-2xl overflow-hidden cursor-crosshair touch-none select-none transition-transform duration-200" style={{ transform: `scale(${canvasZoom})`, backgroundImage: showGrid ? 'radial-gradient(rgba(148,163,184,0.1) 1px, transparent 1px)' : 'none', backgroundSize: '20px 20px' }}>
+                    <div className="relative w-[400px] h-[400px] rounded-xl shadow-2xl overflow-hidden cursor-crosshair touch-none select-none transition-transform duration-200 border" style={{ transform: `scale(${canvasZoom})`, backgroundColor: 'rgb(from var(--background) r g b / 0.4)', borderColor: 'rgb(from var(--border) r g b / 0.5)', backgroundImage: showGrid ? 'radial-gradient(rgb(from var(--text-secondary) r g b / 0.1) 1px, transparent 1px)' : 'none', backgroundSize: '20px 20px' }}>
                         <svg ref={svgRef} viewBox={`0 0 ${CANVAS_SIZE} ${CANVAS_SIZE}`} className="w-full h-full" onMouseDown={handleStart} onMouseMove={handleMove} onMouseUp={handleEnd} onMouseLeave={handleEnd} onTouchStart={handleStart} onTouchMove={handleMove} onTouchEnd={handleEnd}>
                             {strokes.map((s) => s.visible && (
                                 s.type === 'image' ? (
-                                    <image key={s.id} href={s.imageUrl} x={s.x} y={s.y} width={s.width} height={s.height} opacity={s.opacity} className={activeLayerId === s.id ? 'outline outline-2 outline-purple-500' : ''} />
+                                    <image key={s.id} href={s.imageUrl} x={s.x} y={s.y} width={s.width} height={s.height} opacity={s.opacity} className={activeLayerId === s.id ? 'outline outline-2 outline-[var(--accent)]' : ''} />
                                 ) : (
                                     <path
                                         key={s.id}
@@ -513,7 +513,7 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({ scriptConfig, setScriptConf
                                         strokeLinecap={s.cap}
                                         strokeLinejoin="round"
                                         strokeOpacity={s.locked ? 0.3 : 1}
-                                        style={activeLayerId === s.id ? { filter: 'drop-shadow(0px 0px 8px rgba(168, 85, 247, 0.4))' } : {}}
+                                        style={activeLayerId === s.id ? { filter: 'drop-shadow(0px 0px 8px rgb(from var(--indicator) r g b / 0.4))' } : {}}
                                     />
                                 )
                             ))}

@@ -65,7 +65,7 @@ const Sidebar = forwardRef<SidebarHandle, SidebarProps>(
               paddingLeft: isOpen ? (isActive ? '10px' : '12px') : (isActive ? '4px' : '8px'),
               justifyContent: isOpen ? "flex-start" : "center",
             }}
-            onMouseEnter={(e) => !isActive && (e.currentTarget.style.backgroundColor = 'rgba(91, 123, 255, 0.1)')}
+            onMouseEnter={(e) => !isActive && (e.currentTarget.style.backgroundColor = 'rgb(from var(--accent) r g b / 0.1)')}
             onMouseLeave={(e) => !isActive && (e.currentTarget.style.backgroundColor = 'transparent')}
             title={!isOpen ? item.label : undefined}
           >

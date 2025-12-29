@@ -30,7 +30,7 @@ export const Modal: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-[100]">
+    <div className="fixed inset-0 bg-[rgb(from var(--background) r g b / 0.7)] backdrop-blur-sm flex items-center justify-center p-4 z-[100]">
       <div 
         className={`rounded-xl w-full ${maxWidth} shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 flex flex-col max-h-[90vh] relative`}
         style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)', border: '1px solid' }}

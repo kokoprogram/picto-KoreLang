@@ -232,7 +232,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ settings, updateSettings 
           {activeTab === 'GENERAL' ? (
             <>
               {/* AI toggle */}
-              <div className="flex items-center justify-between p-4 border rounded-lg" style={{ backgroundColor: 'rgba(var(--accent-rgb), 0.1)', borderColor: 'var(--accent)' }}>
+              <div className="flex items-center justify-between p-4 border rounded-lg" style={{ backgroundColor: 'rgb(from var(--accent) r g b / 0.1)', borderColor: 'var(--accent)' }}>
                 <div>
                   <div className="flex items-center gap-2 text-sm font-bold" style={{ color: 'var(--text-primary)' }}><Cpu size={16} style={{ color: 'var(--accent)' }} /> {t('settings.cognitive_ai')}</div>
                   <p className="text-[10px]" style={{ color: 'var(--text-tertiary)' }}>{t('settings.cognitive_ai_desc')}</p>
@@ -413,7 +413,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ settings, updateSettings 
                   </div>
                 </div>
                 
-                <div className="p-4 space-y-3 border rounded-lg bg-slate-900/50 border-slate-800">
+                <div className="p-4 space-y-3 border rounded-lg" style={{ backgroundColor: 'rgb(from var(--background) r g b / 0.5)', borderColor: 'var(--border)' }}>
                   {[
                     { key: 'primary', label: t('settings.primary_color') || 'Couleur primaire' },
                     { key: 'secondary', label: t('settings.secondary_color') || 'Couleur secondaire' },
@@ -435,12 +435,12 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ settings, updateSettings 
                     { key: 'disabled', label: t('settings.disabled') || 'Désactivé' }
                   ].map(({ key, label }) => (
                     <div key={key} className="flex items-center justify-between gap-4">
-                      <label className="flex-1 text-sm text-slate-300">{label}</label>
+                      <label className="flex-1 text-sm" style={{ color: 'var(--text-primary)' }}>{label}</label>
                       <div className="flex items-center gap-3">
-                        <span className="text-xs text-slate-500 font-mono min-w-[60px] text-right">
+                        <span className="text-xs font-mono min-w-[60px] text-right" style={{ color: 'var(--text-tertiary)' }}>
                           {settings.customTheme?.[key as keyof typeof DEFAULT_CUSTOM] || DEFAULT_CUSTOM[key as keyof typeof DEFAULT_CUSTOM]}
                         </span>
-                        <div className="relative w-10 h-10 overflow-hidden transition-colors border-2 rounded border-slate-700 hover:border-blue-500">
+                        <div className="relative w-10 h-10 overflow-hidden transition-colors border-2 rounded hover:border-[var(--accent)]" style={{ borderColor: 'var(--border)', backgroundColor: 'var(--surface)' }}>
                           <input
                             type="color"
                             value={settings.customTheme?.[key as keyof typeof DEFAULT_CUSTOM] || DEFAULT_CUSTOM[key as keyof typeof DEFAULT_CUSTOM]}

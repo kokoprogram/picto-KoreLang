@@ -32,7 +32,7 @@ export const ViewHeader: React.FC<ViewHeaderProps> = ({ icon: Icon, title, subti
             style={{ backgroundColor: 'var(--elevated)', borderColor: 'var(--border)' }}
         >
             <div className="flex items-center gap-3 flex-1">
-                <div className="p-2 rounded shrink-0" style={{ backgroundColor: 'rgba(var(--accent-rgb), 0.2)' }}>
+                <div className="p-2 rounded shrink-0" style={{ backgroundColor: 'rgb(from var(--accent) r g b / 0.2)' }}>
                     <Icon style={{ color: 'var(--accent)' }} size={20} />
                 </div>
                 

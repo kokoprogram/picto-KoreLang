@@ -100,7 +100,13 @@ const Dashboard: React.FC<DashboardProps> = ({
             <div className="flex-1 space-y-1 overflow-y-auto custom-scrollbar">
               {recentEntries.length > 0 ? (
                 recentEntries.map((entry, idx) => (
-                  <div key={`${entry.id}-${idx}`} className="flex items-center justify-between p-3 transition-colors border-b rounded-md hover:bg-slate-700/50 last:border-0 group" style={{ borderColor: 'var(--border)' }}>
+                  <div
+                    key={`${entry.id}-${idx}`}
+                    className="flex items-center justify-between p-3 transition-colors border-b rounded-md last:border-0 group"
+                    style={{ borderColor: 'var(--border)' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgb(from var(--surface) r g b / 0.5)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                  >
                       <div className="flex items-center gap-4">
                       {isScriptMode && hasScript ? (
                         <span className="text-xl font-bold" style={{ color: 'var(--accent)' }}>

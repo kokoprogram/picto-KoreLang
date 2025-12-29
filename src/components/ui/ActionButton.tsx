@@ -37,7 +37,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
       <div className="flex justify-between items-start mb-3">
         <div 
           className="p-2 rounded-md"
-          style={{ backgroundColor: 'rgba(var(--accent-rgb), 0.2)' }}
+          style={{ backgroundColor: 'rgb(from var(--accent) r g b / 0.2)' }}
         >
           <div 
             style={{ color: 'var(--accent)' }}

@@ -132,7 +132,7 @@ const MorphologyEditor: React.FC<MorphologyEditorProps> = ({ data, setData, scri
                         className={`flex-1 text-left px-3 py-2 rounded-l text-sm font-medium transition-all ${
                             activeParadigmId === p.id ? 'border-l-2' : ''
                         }`}
-                        style={activeParadigmId === p.id ? { backgroundColor: 'rgba(var(--accent-rgb), 0.2)', color: 'var(--accent)', borderColor: 'var(--accent)' } : { color: 'var(--text-secondary)' }}
+                        style={activeParadigmId === p.id ? { backgroundColor: 'rgb(from var(--accent) r g b / 0.2)', color: 'var(--accent)', borderColor: 'var(--accent)' } : { color: 'var(--text-secondary)' }}
                         onMouseEnter={(e) => { if (activeParadigmId !== p.id) e.currentTarget.style.backgroundColor = 'var(--surface)'; }}
                         onMouseLeave={(e) => { if (activeParadigmId !== p.id) e.currentTarget.style.backgroundColor = ''; }}
                     >
@@ -310,7 +310,7 @@ const MorphologyEditor: React.FC<MorphologyEditorProps> = ({ data, setData, scri
                         </table>
                     </div>
                     
-                    <div className="mt-4 p-3 rounded text-xs flex gap-2 border" style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)', borderColor: 'rgba(59, 130, 246, 0.3)', color: 'var(--accent)' }}>
+                    <div className="mt-4 p-3 rounded text-xs flex gap-2 border" style={{ backgroundColor: 'rgb(from var(--accent) r g b / 0.1)', borderColor: 'rgb(from var(--accent) r g b / 0.3)', color: 'var(--accent)' }}>
                         <span className="font-bold">Pro Tip:</span> 
                         Use Regex conditions to create complex morphophonology. E.g., apply a suffix only if the root ends in a vowel (<code>[aeiou]$</code>).
                     </div>
