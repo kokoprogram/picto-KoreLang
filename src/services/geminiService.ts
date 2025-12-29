@@ -388,8 +388,8 @@ export const generateWords = async (
         }
 
         if (phonology) {
-            const cons = phonology.consonants.map(p => p.symbol).join(', ');
-            const vows = phonology.vowels.map(p => p.symbol).join(', ');
+            const cons = phonology.consonants.map(p => p.phoneme.symbol).join(', ');
+            const vows = phonology.vowels.map(p => p.phoneme.symbol).join(', ');
             const syl = phonology.syllableStructure || 'Free';
             globalRulesPrompt += `\nPHONOLOGY RULES:
             - Consonants available: ${cons}

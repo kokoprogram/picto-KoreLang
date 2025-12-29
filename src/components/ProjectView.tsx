@@ -90,7 +90,7 @@ export const ProjectView: React.FC<ProjectViewProps> = ({
     case "PHONOLOGY":
       return (
         <PhonologyEditor
-          data={phonology}
+          phonology={phonology}
           setData={setPhonology}
           enableAI={enableAI}
         />

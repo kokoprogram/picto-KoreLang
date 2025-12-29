@@ -101,18 +101,18 @@ const Lexicon: React.FC<LexiconProps> = ({
 
     const isConsonant = (char: string) => {
         if (phonology.consonants.length === 0) return !'aeiouàáèéìíòóùú'.includes(char.toLowerCase());
-        return phonology.consonants.some(c => c.symbol === char) || !'aeiouàáèéìíòóùú'.includes(char.toLowerCase());
+        return phonology.consonants.some(c => c.phoneme.symbol === char) || !'aeiouàáèéìíòóùú'.includes(char.toLowerCase());
     };
 
     const isVowel = (char: string) => {
         if (phonology.vowels.length === 0) return 'aeiouàáèéìíòóùú'.includes(char.toLowerCase());
-        return phonology.vowels.some(v => v.symbol === char) || 'aeiouàáèéìíòóùú'.includes(char.toLowerCase());
+        return phonology.vowels.some(v => v.phoneme.symbol === char) || 'aeiouàáèéìíòóùú'.includes(char.toLowerCase());
     };
 
     const getCVPattern = (word: string) => {
         return word.split('').map(char => {
-            if (phonology.vowels.some(v => v.symbol === char)) return 'V';
-            if (phonology.consonants.some(c => c.symbol === char)) return 'C';
+            if (phonology.vowels.some(v => v.phoneme.symbol === char)) return 'V';
+            if (phonology.consonants.some(c => c.phoneme.symbol === char)) return 'C';
             if ('aeiouàáèéìíòóùú'.includes(char.toLowerCase())) return 'V';
             return 'C';
         }).join('');
@@ -631,7 +631,7 @@ const Lexicon: React.FC<LexiconProps> = ({
     const generateHeaderActions = (
         <div className="flex items-center gap-3">
             {!isApiKeySet() && (
-                <div className="hidden md:flex items-center flex-1 gap-3 p-2 text-xs border rounded-lg bg-amber-950/20 border-amber-900/50 text-amber-200">
+                <div className="items-center flex-1 hidden gap-3 p-2 text-xs border rounded-lg md:flex bg-amber-950/20 border-amber-900/50 text-amber-200">
                     <ShieldAlert size={14} className="shrink-0 text-amber-500" />
                     <p>{t('lexicon.ai_requires_key') || 'AI Generation requires an API Key.'} <a href="https://github.com/zRinexD/KoreLang/" target="_blank" rel="noopener noreferrer" className="font-bold underline">{t('lexicon.docs') || 'Documentation'}</a>.</p>
                 </div>
@@ -679,7 +679,7 @@ const Lexicon: React.FC<LexiconProps> = ({
         >
             {(showFilters || posFilter !== 'ALL') && (
                 <div className="sticky flex justify-start pb-0" style={{ top: 0, left: 0, right: 0, zIndex: 45 }}>
-                    <div className="w-full flex flex-wrap items-center gap-3 p-2 border" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
+                    <div className="flex flex-wrap items-center w-full gap-3 p-2 border" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
                         <div className="flex items-center gap-2 pr-4 border-r rtl:border-r-0 rtl:border-l rtl:pr-0 rtl:pl-4" style={{ borderColor: 'var(--divider)' }}>
                             <Filter size={14} style={{ color: 'var(--text-tertiary)' }} />
                             <select value={posFilter} onChange={(e) => setPosFilter(e.target.value)} className="px-2 py-1 text-xs border rounded outline-none focus:ring-1" style={{ backgroundColor: 'var(--elevated)', borderColor: 'var(--border)', color: 'var(--text-primary)', caretColor: 'var(--accent)', outlineColor: 'var(--accent)' }}>
@@ -792,7 +792,7 @@ const Lexicon: React.FC<LexiconProps> = ({
                                 <div className="flex gap-1">
                                     <button
                                         onClick={() => setPinIPAKeyboard(!pinIPAKeyboard)}
-                                        className="p-1 rounded transition-colors"
+                                        className="p-1 transition-colors rounded"
                                         style={{ color: pinIPAKeyboard ? 'var(--accent)' : 'var(--text-tertiary)' }}
                                         title={t('lexicon.pin_panel')}
                                     >
@@ -846,7 +846,7 @@ const Lexicon: React.FC<LexiconProps> = ({
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-1">
                                     <label className="text-xs font-semibold uppercase" style={{ color: 'var(--text-secondary)' }}>{t('lexicon.word')}</label>
-                                    <input autoFocus value={newWord} onChange={(e) => setNewWord(e.target.value)} className="w-full border rounded p-2 text-sm focus:outline-none focus:ring-1" style={{ backgroundColor: 'var(--elevated)', borderColor: validationErrors.length > 0 ? 'var(--error)' : 'var(--border)', color: 'var(--text-primary)', caretColor: 'var(--accent)' }} placeholder={t('lexicon.word_placeholder')} />
+                                    <input autoFocus value={newWord} onChange={(e) => setNewWord(e.target.value)} className="w-full p-2 text-sm border rounded focus:outline-none focus:ring-1" style={{ backgroundColor: 'var(--elevated)', borderColor: validationErrors.length > 0 ? 'var(--error)' : 'var(--border)', color: 'var(--text-primary)', caretColor: 'var(--accent)' }} placeholder={t('lexicon.word_placeholder')} />
                                 </div>
                                 <div className="space-y-1">
                                     <label className="text-xs font-semibold uppercase" style={{ color: 'var(--text-secondary)' }}>{t('lexicon.ipa')}</label>
@@ -855,11 +855,11 @@ const Lexicon: React.FC<LexiconProps> = ({
                                             value={newIPA}
                                             onChange={(e) => setNewIPA(e.target.value)}
                                             onFocus={() => setShowIPAKeyboard(true)}
-                                            className="w-full p-2 font-mono border rounded text-sm focus:outline-none focus:ring-1"
+                                            className="w-full p-2 font-mono text-sm border rounded focus:outline-none focus:ring-1"
                                             style={{ backgroundColor: 'var(--elevated)', borderColor: 'var(--border)', color: 'var(--text-primary)', caretColor: 'var(--accent)' }}
                                             placeholder={t('lexicon.ipa_placeholder')}
                                         />
-                                        <button onClick={() => setShowIPAKeyboard(!showIPAKeyboard)} className="absolute right-2 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-secondary)' }}>
+                                        <button onClick={() => setShowIPAKeyboard(!showIPAKeyboard)} className="absolute -translate-y-1/2 right-2 top-1/2" style={{ color: 'var(--text-secondary)' }}>
                                             <Mic size={14} />
                                         </button>
                                     </div>
@@ -871,21 +871,21 @@ const Lexicon: React.FC<LexiconProps> = ({
                             </div>
                             <div className="space-y-1">
                                 <label className="text-xs font-semibold uppercase" style={{ color: 'var(--text-secondary)' }}>{t('lexicon.definition')}</label>
-                                <textarea value={newDefinition} onChange={(e) => setNewDefinition(e.target.value)} className="w-full h-24 p-2 border rounded resize-none text-sm focus:outline-none focus:ring-1" style={{ backgroundColor: 'var(--elevated)', borderColor: 'var(--border)', color: 'var(--text-primary)', caretColor: 'var(--accent)' }} placeholder="..." />
+                                <textarea value={newDefinition} onChange={(e) => setNewDefinition(e.target.value)} className="w-full h-24 p-2 text-sm border rounded resize-none focus:outline-none focus:ring-1" style={{ backgroundColor: 'var(--elevated)', borderColor: 'var(--border)', color: 'var(--text-primary)', caretColor: 'var(--accent)' }} placeholder="..." />
                             </div>
                             <div className="pt-4 mt-2 border-t" style={{ borderColor: 'var(--divider)' }}>
                                 <label className="flex items-center gap-2 mb-3 text-xs font-bold uppercase" style={{ color: 'var(--text-secondary)' }}><GitFork size={12} /> {t('lexicon.etymology')}</label>
                                 <div className="space-y-3">
                                     <div className="space-y-1">
                                         <label className="text-[10px] font-semibold uppercase" style={{ color: 'var(--text-tertiary)' }}>{t('lexicon.derivedFrom')}</label>
-                                        <select value={newDerivedFrom} onChange={(e) => setNewDerivedFrom(e.target.value)} className="w-full p-2 border rounded text-sm focus:outline-none focus:ring-1" style={{ backgroundColor: 'var(--elevated)', borderColor: 'var(--border)', color: 'var(--text-primary)', caretColor: 'var(--accent)' }}>
+                                        <select value={newDerivedFrom} onChange={(e) => setNewDerivedFrom(e.target.value)} className="w-full p-2 text-sm border rounded focus:outline-none focus:ring-1" style={{ backgroundColor: 'var(--elevated)', borderColor: 'var(--border)', color: 'var(--text-primary)', caretColor: 'var(--accent)' }}>
                                             <option value="">{t('lexicon.root_option') || '-- Root --'}</option>
                                             {entries.sort((a, b) => a.word.localeCompare(b.word)).map(e => <option key={e.id} value={e.id}>{e.word} ({getPosLabel(e.pos)})</option>)}
                                         </select>
                                     </div>
                                     <div className="space-y-1">
                                         <label className="text-[10px] font-semibold uppercase" style={{ color: 'var(--text-tertiary)' }}>{t('lexicon.etymology')}</label>
-                                        <input value={newEtymology} onChange={(e) => setNewEtymology(e.target.value)} className="w-full p-2 border rounded text-sm focus:outline-none focus:ring-1" style={{ backgroundColor: 'var(--elevated)', borderColor: 'var(--border)', color: 'var(--text-primary)', caretColor: 'var(--accent)' }} placeholder={t('lexicon.etymology_placeholder')} />
+                                        <input value={newEtymology} onChange={(e) => setNewEtymology(e.target.value)} className="w-full p-2 text-sm border rounded focus:outline-none focus:ring-1" style={{ backgroundColor: 'var(--elevated)', borderColor: 'var(--border)', color: 'var(--text-primary)', caretColor: 'var(--accent)' }} placeholder={t('lexicon.etymology_placeholder')} />
                                     </div>
                                 </div>
                             </div>

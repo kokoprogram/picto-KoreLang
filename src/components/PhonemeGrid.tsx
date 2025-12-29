@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { X, Plus } from 'lucide-react';
-import { Phoneme, PhonemeModel } from '../types';
+import { PhonemeInstance, PhonemeModel } from '../types';
 import { Card, Section } from './ui';
 import AddPhonemeModal from './AddPhonemeModal';
 import { useTranslation } from '../i18n';
@@ -51,23 +51,22 @@ const impossibleConsonantCells: Record<string, Record<string, boolean>> = {
     },
 };
 
-export interface PhonemeGridProps {
+export type PhonemeGridProps = {
     title: string;
     icon: React.ReactNode;
     isVowels: boolean;
-    getPhonemes: (row: string, col: string) => Phoneme[];
-    // onCellClick: (row: string, col: string) => void;
-    onRemove: (phoneme: Phoneme) => void;
-    renderPhoneme: (phoneme: Phoneme) => React.ReactNode;
+    getPhonemes: (row: string, col: string) => PhonemeInstance[];
+    onRemove: (phoneme: PhonemeInstance) => void;
+    renderPhoneme: (phoneme: PhonemeInstance) => React.ReactNode;
     minWidth?: number;
     legend?: React.ReactNode;
     unclassified?: {
-        items: Phoneme[];
+        items: PhonemeInstance[];
         titleKey: string;
         position?: 'top' | 'bottom';
-        renderItem?: (phoneme: Phoneme, index: number) => React.ReactNode;
+        renderItem?: (phoneme: PhonemeInstance, index: number) => React.ReactNode;
     };
-}
+};
 
 
 interface AddPhonemeModalState {
@@ -76,10 +75,10 @@ interface AddPhonemeModalState {
     col: string | null;
 }
 
-interface PhonemeGridWithModelsProps extends PhonemeGridProps {
+export type PhonemeGridWithModelsProps = PhonemeGridProps & {
     phonemeModels: PhonemeModel[];
     onAddPhoneme: (phoneme: PhonemeModel, row: string, col: string, isVowel: boolean) => void;
-}
+};
 
 const PhonemeGrid: React.FC<PhonemeGridWithModelsProps> = ({
     title,
@@ -106,7 +105,7 @@ const PhonemeGrid: React.FC<PhonemeGridWithModelsProps> = ({
     // Mémoiser les données de la grille pour éviter les recalculs
     const gridData = useMemo(() => {
         return rows.map(row => 
-            columns.map(col => getPhonemes(row, col).filter(p => p.symbol))
+            columns.map(col => getPhonemes(row, col).filter(p => p.phoneme.symbol))
         );
     }, [rows, columns, getPhonemes]);
 
@@ -138,7 +137,7 @@ const PhonemeGrid: React.FC<PhonemeGridWithModelsProps> = ({
                 <div className="mb-1 text-xs" style={{ color: 'var(--text-tertiary)' }}>{t(unclassified.titleKey)}</div>
                 <div className="flex flex-wrap gap-2">
                     {unclassified.items.map((p, i) => unclassified.renderItem ? unclassified.renderItem(p, i) : (
-                        <span key={`unclassified-${i}`} className="px-2 py-1 font-serif text-lg rounded" style={{ backgroundColor: 'var(--surface)' }}>{p.symbol}</span>
+                        <span key={`unclassified-${i}`} className="px-2 py-1 font-serif text-lg rounded" style={{ backgroundColor: 'var(--surface)' }}>{p.phoneme.symbol}</span>
                     ))}
                 </div>
             </div>
@@ -180,7 +179,7 @@ const PhonemeGrid: React.FC<PhonemeGridWithModelsProps> = ({
                                     <div className="flex justify-center gap-1 items-center min-h-[20px]">
                                         {phonemes.length > 0 ? (
                                             phonemes.map((p, idx) => (
-                                                <div key={`${row}-${col}-${idx}-${p.symbol}`} className="relative group/ph">
+                                                <div key={`${row}-${col}-${idx}-${p.phoneme.symbol}`} className="relative group/ph">
                                                     {renderPhoneme(p)}
                                                     <button
                                                         onClick={(e) => { e.stopPropagation(); onRemove(p); }}
@@ -235,7 +234,7 @@ const PhonemeGrid: React.FC<PhonemeGridWithModelsProps> = ({
                 <div className="mb-1 text-[10px]" style={{ color: 'var(--text-tertiary)' }}>{t(unclassified.titleKey)}</div>
                 <div className="flex flex-wrap gap-1">
                     {unclassified.items.map((p, i) => unclassified.renderItem ? unclassified.renderItem(p, i) : (
-                        <span key={`unclassified-bottom-${i}`} className="px-1.5 py-0.5 font-serif text-sm rounded" style={{ backgroundColor: 'var(--surface)' }}>{p.symbol}</span>
+                        <span key={`unclassified-bottom-${i}`} className="px-1.5 py-0.5 font-serif text-sm rounded" style={{ backgroundColor: 'var(--surface)' }}>{p.phoneme.symbol}</span>
                     ))}
                 </div>
             </div>

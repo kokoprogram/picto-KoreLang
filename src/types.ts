@@ -1,3 +1,17 @@
+// Instance d'un phonème dans l'inventaire (référence au modèle + position + diacritiques)
+export interface PhonemeInstance {
+  id: string; // identifiant unique de l'instance (ex: uuid ou concat symbol+cell)
+  phoneme: PhonemeModel; // référence au modèle métier
+  type: 'consonant' | 'vowel';
+  // Position dans la grille
+  manner?: string;
+  place?: string;
+  height?: string;
+  backness?: string;
+  // Diacritiques ou modifications spécifiques à l'instance
+  diacritics?: string[];
+  features?: Record<string, string | boolean | number>;
+}
 // Nouvelle base pour la sérialisation des phonèmes (modèle extensible)
 export interface PhonemeModel {
   /** Identifiant unique du phonème (ex: "p", "b", "a") */
@@ -309,8 +323,8 @@ export interface Phoneme {
 export interface PhonologyConfig {
   name: string;
   description: string;
-  consonants: Phoneme[];
-  vowels: Phoneme[];
+  consonants: PhonemeInstance[];
+  vowels: PhonemeInstance[];
   syllableStructure: string;
   bannedCombinations: string[];
 }
