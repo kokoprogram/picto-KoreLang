@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { AppSettings } from "../types";
 import { useTranslation } from "../i18n";
+import { MonoToggle } from './ui';
 
 interface MenuItem {
   label: string;
@@ -286,21 +287,13 @@ const MenuBar: React.FC<MenuBarProps> = ({
 
       <div className="flex items-center gap-4">
         {toggleScriptMode && (
-          <button
+          <MonoToggle
+            active={isScriptMode}
             onClick={toggleScriptMode}
-            className={`flex items-center gap-2 px-3 py-1 rounded-md text-xs font-bold transition-all border ${
-              isScriptMode
-                ? "bg-purple-900/40 text-purple-300 border-purple-500/50 shadow-[0_0_10px_rgba(168,85,247,0.2)]"
-                : "bg-neutral-900 text-neutral-500 border-neutral-700 hover:text-neutral-300"
-            }`}
+            icon={<Feather size={14} className={isScriptMode ? "animate-pulse" : ""} />}
+            label="Script Mode"
             title="Toggle Native Neural-Glyph Rendering"
-          >
-            <Feather
-              size={14}
-              className={isScriptMode ? "animate-pulse" : ""}
-            />
-            <span className="hidden sm:inline">Script Mode</span>
-          </button>
+          />
         )}
         <div className="w-px h-4 bg-neutral-800" />
         <div className="mr-2 text-xs text-neutral-500">
