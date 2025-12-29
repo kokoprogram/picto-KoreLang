@@ -50,11 +50,11 @@ const PhonemeGrid: React.FC<PhonemeGridProps> = ({
         <Section title={title} icon={icon} className="mb-2" />
 
         {unclassified?.items?.length && unclassified.position !== 'bottom' ? (
-            <div className="p-2 mb-2 text-sm border rounded bg-neutral-900 border-neutral-800 text-neutral-200">
-                <div className="mb-1 text-xs text-neutral-400">{t(unclassified.titleKey)}</div>
+            <div className="p-2 mb-2 text-sm border rounded" style={{ backgroundColor: 'var(--elevated)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}>
+                <div className="mb-1 text-xs" style={{ color: 'var(--text-tertiary)' }}>{t(unclassified.titleKey)}</div>
                 <div className="flex flex-wrap gap-2">
                     {unclassified.items.map((p, i) => unclassified.renderItem ? unclassified.renderItem(p, i) : (
-                        <span key={`unclassified-${i}`} className="px-2 py-1 font-serif text-lg rounded bg-neutral-800">{p.symbol}</span>
+                        <span key={`unclassified-${i}`} className="px-2 py-1 font-serif text-lg rounded" style={{ backgroundColor: 'var(--surface)' }}>{p.symbol}</span>
                     ))}
                 </div>
             </div>
@@ -94,7 +94,10 @@ const PhonemeGrid: React.FC<PhonemeGridProps> = ({
                                                     {renderPhoneme(p)}
                                                     <button
                                                         onClick={(e) => { e.stopPropagation(); onRemove(p); }}
-                                                        className="absolute hidden text-red-500 rounded-full -top-4 -right-2 group-hover/ph:block hover:text-red-400 bg-neutral-950"
+                                                        className="absolute hidden rounded-full -top-4 -right-2 group-hover/ph:block"
+                                                        style={{ color: 'var(--error)', backgroundColor: 'var(--background)' }}
+                                                        onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                                                        onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                                                     >
                                                         <X size={10} />
                                                     </button>
@@ -124,11 +127,11 @@ const PhonemeGrid: React.FC<PhonemeGridProps> = ({
         ) : null}
 
         {unclassified?.items?.length && unclassified.position === 'bottom' ? (
-            <div className="p-2 mt-2 text-xs border rounded bg-neutral-900 border-neutral-800 text-neutral-200">
-                <div className="mb-1 text-[10px] text-neutral-400">{t(unclassified.titleKey)}</div>
+            <div className="p-2 mt-2 text-xs border rounded" style={{ backgroundColor: 'var(--elevated)', borderColor: 'var(--border)', color: 'var(--text-primary)' }}>
+                <div className="mb-1 text-[10px]" style={{ color: 'var(--text-tertiary)' }}>{t(unclassified.titleKey)}</div>
                 <div className="flex flex-wrap gap-1">
                     {unclassified.items.map((p, i) => unclassified.renderItem ? unclassified.renderItem(p, i) : (
-                        <span key={`unclassified-bottom-${i}`} className="px-1.5 py-0.5 font-serif text-sm rounded bg-neutral-800">{p.symbol}</span>
+                        <span key={`unclassified-bottom-${i}`} className="px-1.5 py-0.5 font-serif text-sm rounded" style={{ backgroundColor: 'var(--surface)' }}>{p.symbol}</span>
                     ))}
                 </div>
             </div>

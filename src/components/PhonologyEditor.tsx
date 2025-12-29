@@ -243,65 +243,14 @@ const PhonologyEditor: React.FC<PhonologyEditorProps> = ({ data, setData, enable
 
             {/* Phoneme Editor Modal */}
             {editingPhoneme && (
-                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-                    <div className="w-full max-w-sm overflow-hidden duration-200 border shadow-2xl bg-neutral-900 border-neutral-700 rounded-xl animate-in fade-in zoom-in">
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-800 bg-neutral-950">
-                            <h3 className="flex items-center gap-2 font-bold capitalize text-md text-neutral-100">
-                                <Plus size={16} className="text-blue-500" />
-                                {editingPhoneme.type === 'consonant' ? t('phonology.add_consonant') : t('phonology.add_vowel')}
-                            </h3>
-                            <button onClick={() => setEditingPhoneme(null)} className="text-neutral-500 hover:text-white">
-                                <X size={18} />
-                            </button>
-                        </div>
-                        <div className="p-6 space-y-4">
-                            <div className="text-xs font-bold text-center uppercase text-neutral-500">
-                                {editingPhoneme.type === 'consonant'
-                                    ? `${t(`phonology.place.${editingPhoneme.place}`)} ${t(`phonology.manner.${editingPhoneme.manner}`)}`
-                                    : `${t(`phonology.height.${editingPhoneme.height}`)} ${t(`phonology.backness.${editingPhoneme.backness}`)}`
-                                }
-                            </div>
-                            <div className="space-y-1">
-                                <label className="text-xs font-semibold uppercase text-neutral-400">{t('phonology.symbol_label')}</label>
-                                <input
-                                    autoFocus
-                                    value={symbol}
-                                    onChange={(e) => setSymbol(e.target.value)}
-                                    onKeyDown={(e) => e.key === 'Enter' && handleSavePhoneme()}
-                                    className="w-full p-3 font-serif text-2xl text-center border rounded outline-none bg-neutral-950 border-neutral-700 focus:border-blue-500"
-                                    style={{ color: 'var(--text-tertiary)' }}
-                                    placeholder={t('phonology.symbol_placeholder')}
-                                />
-                            </div>
-                            {editingPhoneme.type === 'consonant' ? (
-                                <label className="flex items-center gap-3 cursor-pointer group">
-                                    <input
-                                        type="checkbox"
-                                        checked={voiced}
-                                        onChange={(e) => setVoiced(e.target.checked)}
-                                        className="sr-only"
-                                    />
-                                    <div className={`w-10 h-6 rounded-full transition-colors relative ${voiced ? 'bg-blue-600' : 'bg-neutral-700'}`}>
-                                        <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${voiced ? 'translate-x-4' : ''}`} />
-                                    </div>
-                                    <span className="text-sm text-neutral-300">{t('phonology.voiced')}</span>
-                                </label>
-                            ) : (
-                                <label className="flex items-center gap-3 cursor-pointer group">
-                                    <input
-                                        type="checkbox"
-                                        checked={rounded}
-                                        onChange={(e) => setRounded(e.target.checked)}
-                                        className="sr-only"
-                                    />
-                                    <div className={`w-10 h-6 rounded-full transition-colors relative ${rounded ? 'bg-amber-600' : 'bg-neutral-700'}`}>
-                                        <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${rounded ? 'translate-x-4' : ''}`} />
-                                    </div>
-                                    <span className="text-sm text-neutral-300">{t('phonology.rounded')}</span>
-                                </label>
-                            )}
-                        </div>
-                        <div className="flex justify-end gap-3 px-6 py-4 border-t bg-neutral-950 border-neutral-800">
+                <Modal
+                    isOpen={!!editingPhoneme}
+                    onClose={() => setEditingPhoneme(null)}
+                    title={editingPhoneme.type === 'consonant' ? t('phonology.add_consonant') : t('phonology.add_vowel')}
+                    icon={<Plus size={16} />}
+                    maxWidth="max-w-sm"
+                    footer={
+                        <>
                             <CompactButton
                                 onClick={() => setEditingPhoneme(null)}
                                 variant="outline"
@@ -317,9 +266,55 @@ const PhonologyEditor: React.FC<PhonologyEditorProps> = ({ data, setData, enable
                                 icon={<Check size={16} />}
                                 label={t('common.save')}
                             />
-                        </div>
+                        </>
+                    }
+                >
+                    <div className="text-xs font-bold text-center uppercase" style={{ color: 'var(--text-tertiary)' }}>
+                        {editingPhoneme.type === 'consonant'
+                            ? `${t(`phonology.place.${editingPhoneme.place}`)} ${t(`phonology.manner.${editingPhoneme.manner}`)}`
+                            : `${t(`phonology.height.${editingPhoneme.height}`)} ${t(`phonology.backness.${editingPhoneme.backness}`)}`
+                        }
                     </div>
-                </div>
+                    <div className="space-y-1">
+                        <label className="text-xs font-semibold uppercase" style={{ color: 'var(--text-tertiary)' }}>{t('phonology.symbol_label')}</label>
+                        <input
+                            autoFocus
+                            value={symbol}
+                            onChange={(e) => setSymbol(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleSavePhoneme()}
+                            className="w-full p-3 font-serif text-2xl text-center border rounded outline-none"
+                            style={{ backgroundColor: 'var(--background)', borderColor: 'var(--border)', color: 'var(--text-tertiary)' }}
+                            placeholder={t('phonology.symbol_placeholder')}
+                        />
+                    </div>
+                    {editingPhoneme.type === 'consonant' ? (
+                        <label className="flex items-center gap-3 cursor-pointer group">
+                            <input
+                                type="checkbox"
+                                checked={voiced}
+                                onChange={(e) => setVoiced(e.target.checked)}
+                                className="sr-only"
+                            />
+                            <div className={`w-10 h-6 rounded-full transition-colors relative`} style={{ backgroundColor: voiced ? 'var(--accent)' : 'var(--disabled)' }}>
+                                <div className={`absolute top-1 left-1 w-4 h-4 rounded-full transition-transform ${voiced ? 'translate-x-4' : ''}`} style={{ backgroundColor: 'var(--text-primary)' }} />
+                            </div>
+                            <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t('phonology.voiced')}</span>
+                        </label>
+                    ) : (
+                        <label className="flex items-center gap-3 cursor-pointer group">
+                            <input
+                                type="checkbox"
+                                checked={rounded}
+                                onChange={(e) => setRounded(e.target.checked)}
+                                className="sr-only"
+                            />
+                            <div className={`w-10 h-6 rounded-full transition-colors relative`} style={{ backgroundColor: rounded ? 'var(--warning)' : 'var(--disabled)' }}>
+                                <div className={`absolute top-1 left-1 w-4 h-4 rounded-full transition-transform ${rounded ? 'translate-x-4' : ''}`} style={{ backgroundColor: 'var(--text-primary)' }} />
+                            </div>
+                            <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t('phonology.rounded')}</span>
+                        </label>
+                    )}
+                </Modal>
             )}
 
             {/* AI Preview Floating Panel */}

@@ -14,6 +14,7 @@ import { useUI } from "../ui/UIContext";
 import { useProject } from "../hooks/useProject";
 import { ConScriptText } from "./ConScriptRenderer";
 import { POS_SUGGESTIONS } from "../types";
+import { Modal } from "./ui";
 
 const ConstraintsModal: React.FC = () => {
   const { t } = useTranslation();
@@ -129,27 +130,15 @@ const ConstraintsModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-slate-900 border border-slate-700 w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 flex flex-col max-h-[85vh]">
-        {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b" style={{ borderColor: 'var(--border)', backgroundColor: 'var(--secondary)' }}>
-          <div>
-            <h2 className="flex items-center gap-2 text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
-              <ShieldCheck style={{ color: 'var(--accent)' }} size={24} />
-              {t("menu.validation")}
-            </h2>
-            <p className="mt-1 text-sm" style={{ color: 'var(--text-secondary)' }}>{t("val.desc")}</p>
-          </div>
-          <button
-            onClick={() => ui.close("constraints")}
-            className="p-1 transition-colors rounded text-slate-500 hover:text-white hover:bg-slate-800"
-          >
-            <X size={20} />
-          </button>
-        </div>
-
+    <Modal
+      isOpen={ui.isOpen("constraints")}
+      onClose={() => ui.close("constraints")}
+      title={t("menu.validation")}
+      icon={<ShieldCheck size={20} />}
+      maxWidth="max-w-2xl"
+    >
         {/* Tabs */}
-        <div className="flex border-b" style={{ borderColor: 'var(--border)', backgroundColor: 'var(--secondary)' }}>
+        <div className="flex border-b -mx-6 px-6" style={{ borderColor: 'var(--border)', backgroundColor: 'var(--elevated)' }}>
           {[
             { id: "GENERAL", label: t("tab.general"), icon: Type },
             { id: "PHONOTACTICS", label: t("tab.phonotactics"), icon: Regex },
@@ -609,19 +598,7 @@ const ConstraintsModal: React.FC = () => {
             </div>
           )}
         </div>
-
-        <div className="flex justify-end p-4 border-t bg-slate-950 border-slate-800">
-          <button
-            onClick={() => ui.close("constraints")}
-            className="flex items-center gap-2 px-6 py-2 text-sm font-bold transition-all rounded-lg shadow-lg active:scale-95"
-            style={{ backgroundColor: 'var(--accent)', color: 'var(--text-primary)' }}
-          >
-            <CheckCircle size={16} />
-            {t("settings.done")}
-          </button>
-        </div>
-      </div>
-    </div>
+    </Modal>
   );
 };
 

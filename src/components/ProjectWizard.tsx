@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { X, Box, User, FileText, Check, ShieldCheck } from 'lucide-react';
+import { Box, User, FileText, Check, ShieldCheck } from 'lucide-react';
 import { useTranslation } from '../i18n';
 import { useUI } from '../ui/UIContext';
 import { useProject } from '../hooks/useProject';
-import { CompactButton } from './ui';
+import { CompactButton, Modal } from './ui';
 
 const ProjectWizard: React.FC = () => {
   const { t } = useTranslation();
@@ -47,27 +47,33 @@ const ProjectWizard: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="w-full max-w-lg overflow-hidden duration-200 border shadow-2xl bg-slate-900 border-slate-700 rounded-xl animate-in fade-in zoom-in">
-        
-        {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-slate-800" style={{ backgroundColor: 'var(--elevated)' }}>
-          <div>
-            <h2 className="flex items-center gap-2 text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
-              <Box className="text-blue-500" size={20} />
-              {isCreateMode ? t('wizard.create_title') : t('wizard.edit_title')}
-            </h2>
-            <p className="mt-1 text-sm text-slate-400">
-              {isCreateMode ? t('wizard.create_desc') : t('wizard.edit_desc')}
-            </p>
-          </div>
-          <button onClick={() => ui.close('wizard')} className="p-1 transition-colors rounded text-slate-500 hover:text-white hover:bg-slate-800">
-            <X size={20} />
-          </button>
-        </div>
-
+    <Modal
+      isOpen={isOpen}
+      onClose={() => ui.close('wizard')}
+      title={isCreateMode ? t('wizard.create_title') : t('wizard.edit_title')}
+      icon={<Box size={20} />}
+      maxWidth="max-w-lg"
+      footer={
+        <>
+          <CompactButton
+            onClick={() => ui.close('wizard')}
+            variant="outline"
+            color="var(--error)"
+            icon={<Check size={12} />}
+            label={t('common.cancel')}
+          />
+          <CompactButton
+            onClick={handleCreate}
+            variant="solid"
+            color="var(--primary)"
+            icon={<Check size={14} />}
+            label={isCreateMode ? t('wizard.create_btn') : t('wizard.save_btn')}
+          />
+        </>
+      }
+    >
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5">
           
           <div className="space-y-1.5">
             <label className="block text-xs font-bold tracking-wider uppercase text-slate-500">{t('wizard.name')}</label>
@@ -128,26 +134,8 @@ const ProjectWizard: React.FC = () => {
               />
             </div>
           </div>
-
-          <div className="flex justify-end gap-3 pt-4">
-            <CompactButton
-              onClick={() => ui.close('wizard')}
-              variant="outline"
-              color="var(--error)"
-              icon={<X size={12} />}
-              label={t('common.cancel')}
-            />
-            <CompactButton
-              onClick={handleCreate}
-              variant="solid"
-              color="var(--primary)"
-              icon={<Check size={14} />}
-              label={isCreateMode ? t('wizard.create_btn') : t('wizard.save_btn')}
-            />
-          </div>
         </form>
-      </div>
-    </div>
+    </Modal>
   );
 };
 

@@ -6,7 +6,7 @@ import { AppSettings } from '../types';
 import { DEFAULT_CUSTOM } from '../constants';
 import { isApiKeySet, getApiKey } from '../services/geminiService';
 import { useCommandExecutor } from '../state/commandStore';
-import { Card, Section, CompactButton, ToggleButton, FormField } from './ui';
+import { Card, Section, CompactButton, ToggleButton, FormField, Modal } from './ui';
 
 // Presets de thèmes pour copie dans custom
 const THEME_PRESETS = {
@@ -204,22 +204,15 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ settings, updateSettings 
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center">
-      <div className="w-full max-w-lg rounded-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh]" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)', border: '1px solid' }}>
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b" style={{ backgroundColor: 'var(--secondary)', borderColor: 'var(--border)' }}>
-          <h2 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>{t('settings.preferences_title')}</h2>
-          <CompactButton
-            onClick={() => ui.close('settings')}
-            variant="ghost"
-            color="var(--text-secondary)"
-            icon={<X size={18} />}
-            label=""
-          />
-        </div>
-
+    <Modal
+      isOpen={ui.isOpen('settings')}
+      onClose={() => ui.close('settings')}
+      title={t('settings.preferences_title')}
+      icon={<Palette size={20} />}
+      maxWidth="max-w-lg"
+    >
         {/* Tabs */}
-        <div className="flex text-sm border-b" style={{ borderColor: 'var(--border)', backgroundColor: 'var(--secondary)' }}>
+        <div className="flex px-6 -mx-6 text-sm border-b" style={{ borderColor: 'var(--border)', backgroundColor: 'var(--elevated)' }}>
           <ToggleButton
             isActive={activeTab === 'GENERAL'}
             onClick={() => setActiveTab('GENERAL')}
@@ -235,7 +228,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ settings, updateSettings 
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6 overflow-y-auto">
+        <div className="space-y-6">
           {activeTab === 'GENERAL' ? (
             <>
               {/* AI toggle */}
@@ -476,19 +469,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ settings, updateSettings 
             </>
           )}
         </div>
-
-        {/* Footer */}
-        <div className="flex justify-end p-4 border-t" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}>
-          <CompactButton
-            onClick={() => ui.close('settings')}
-            variant="solid"
-            color="var(--accent)"
-            icon={<Check size={14} />}
-            label="OK"
-          />
-        </div>
-      </div>
-    </div>
+    </Modal>
   );
 };
 
