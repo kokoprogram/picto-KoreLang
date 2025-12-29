@@ -4,6 +4,7 @@ import { generatePhonology, isApiKeySet } from '../services/geminiService';
 import { PhonologyConfig, Phoneme } from '../types';
 import { useTranslation } from '../i18n';
 import { Card, Section, ViewLayout } from './ui';
+import PhonemeGrid from './PhonemeGrid';
 
 interface PhonologyEditorProps {
     data: PhonologyConfig;
@@ -91,9 +92,12 @@ const PhonologyEditor: React.FC<PhonologyEditorProps> = ({ data, setData, enable
         setSymbol('');
     };
 
-    const handleRemovePhoneme = (idx: number, type: 'consonant' | 'vowel') => {
+    const handleRemovePhoneme = (phoneme: Phoneme, type: 'consonant' | 'vowel') => {
         const listKey = type === 'consonant' ? 'consonants' : 'vowels';
-        const updatedList = [...(data[listKey] || [])];
+        const currentList = data[listKey] || [];
+        const idx = currentList.indexOf(phoneme);
+        if (idx < 0) return;
+        const updatedList = [...currentList];
         updatedList.splice(idx, 1);
         setData({ ...data, [listKey]: updatedList });
     };
@@ -223,160 +227,72 @@ const PhonologyEditor: React.FC<PhonologyEditorProps> = ({ data, setData, enable
             <div className="flex-1 overflow-y-auto space-y-8 pr-2 custom-scrollbar">
 
                 {/* Consonants Chart */}
-                <Card className="p-6 overflow-x-auto">
-                    <Section title={t('phonology.consonants')} icon={<LayoutGrid size={20} />} className="mb-6" />
-
-                    {unclassifiedConsonants.length > 0 && (
-                        <div className="mb-4 p-3 bg-neutral-900 border border-neutral-800 rounded text-sm text-neutral-200">
-                            <div className="text-xs text-neutral-400 mb-2">{t('phonology.unclassified_consonants')}</div>
-                            <div className="flex flex-wrap gap-2">
-                                {unclassifiedConsonants.map((p, i) => (
-                                    <span key={`uncons-${i}`} className="px-2 py-1 bg-neutral-800 rounded font-serif text-lg">{p.symbol}</span>
-                                ))}
-                            </div>
-                        </div>
+                <PhonemeGrid
+                    title={t('phonology.consonants')}
+                    icon={<LayoutGrid size={20} />}
+                    isVowels={false}
+                    getPhonemes={(manner, place) => getConsonants(manner, place)}
+                    onCellClick={(manner, place) => {
+                        setEditingPhoneme({ type: 'consonant', manner, place });
+                        setVoiced(false);
+                        setSymbol('');
+                    }}
+                    onRemove={(phoneme) => handleRemovePhoneme(phoneme, 'consonant')}
+                    renderPhoneme={(p) => (
+                        <span
+                            title={`${p.voiced ? 'Voiced' : 'Unvoiced'} ${p.place} ${p.manner}`}
+                            className={`text-lg font-serif ${p.voiced ? 'text-neutral-200' : 'text-neutral-400'}`}
+                        >
+                            {p.symbol}
+                        </span>
                     )}
-
-                    <table className="w-full border-collapse min-w-[800px]">
-                        <thead>
-                            <tr>
-                                <th className="p-2"></th>
-                                {PLACES.map(place => (
-                                    <th key={place} className="p-2 text-xs font-bold uppercase rotate-0" style={{ color: 'var(--text-tertiary)' }}>{t(`phonology.place.${place}`)}</th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {MANNERS.map(manner => (
-                                <tr key={manner} className="border-t" style={{ borderColor: 'var(--divider)' }}>
-                                    <th className="p-2 text-xs font-bold uppercase text-right whitespace-nowrap pr-4" style={{ color: 'var(--text-tertiary)' }}>{t(`phonology.manner.${manner}`)}</th>
-                                    {PLACES.map(place => {
-                                        const phonemes = getConsonants(manner, place).filter(p => p.symbol);
-                                        return (
-                                            <td
-                                                key={`${manner}-${place}`}
-                                                className="p-2 text-center border-l transition-colors cursor-pointer group hover:bg-[var(--surface)]"
-                                                style={{ borderColor: 'var(--divider)' }}
-                                                onClick={() => {
-                                                    setEditingPhoneme({ type: 'consonant', manner, place });
-                                                    setVoiced(false);
-                                                    setSymbol('');
-                                                }}
-                                            >
-                                                <div className="flex justify-center gap-2 items-center min-h-[30px]">
-                                                    {phonemes.length > 0 ? (
-                                                        phonemes.map((p, idx) => (
-                                                            <div key={idx} className="relative group/ph">
-                                                                <span
-                                                                    title={`${p.voiced ? 'Voiced' : 'Unvoiced'} ${place} ${manner}`}
-                                                                    className={`text-lg font-serif ${p.voiced ? 'text-neutral-200' : 'text-neutral-400'}`}
-                                                                >
-                                                                    {p.symbol}
-                                                                </span>
-                                                                <button
-                                                                    onClick={(e) => { e.stopPropagation(); handleRemovePhoneme(data.consonants.indexOf(p), 'consonant'); }}
-                                                                    className="absolute -top-4 -right-2 hidden group-hover/ph:block text-red-500 hover:text-red-400 bg-neutral-950 rounded-full"
-                                                                >
-                                                                    <X size={10} />
-                                                                </button>
-                                                            </div>
-                                                        ))
-                                                    ) : (
-                                                        <Plus size={12} className="text-[color:var(--text-tertiary)] group-hover:text-[color:var(--text-secondary)] transition-colors" />
-                                                    )}
-                                                </div>
-                                            </td>
-                                        );
-                                    })}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </Card>
+                    minWidth={800}
+                    unclassified={{
+                        items: unclassifiedConsonants,
+                        titleKey: 'phonology.unclassified_consonants',
+                        position: 'top',
+                    }}
+                />
 
                 {/* Vowels Chart */}
-                <Card className="p-6 overflow-x-auto">
-                    <Section title={t('phonology.vowels')} icon={<Volume2 size={20} />} className="mb-6" />
-
-                    <table className="w-full border-collapse min-w-[520px]">
-                        <thead>
-                            <tr>
-                                <th className="p-2"></th>
-                                {BACKNESS.map(back => (
-                                    <th key={back} className="p-2 text-xs font-bold uppercase" style={{ color: 'var(--text-tertiary)' }}>
-                                        {t(`phonology.backness.${back}`)}
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {HEIGHTS.map(height => (
-                                <tr key={height} className="border-t" style={{ borderColor: 'var(--divider)' }}>
-                                    <th className="p-2 text-xs font-bold uppercase text-right whitespace-nowrap pr-4" style={{ color: 'var(--text-tertiary)' }}>
-                                        {t(`phonology.height.${height}`)}
-                                    </th>
-                                    {BACKNESS.map(back => {
-                                        const vowels = getVowels(height, back).filter(v => v.symbol);
-                                        return (
-                                            <td
-                                                key={`${height}-${back}`}
-                                                className="p-2 text-center border-l transition-colors cursor-pointer group hover:bg-[var(--surface)]"
-                                                style={{ borderColor: 'var(--divider)' }}
-                                                onClick={() => {
-                                                    setEditingPhoneme({ type: 'vowel', height, backness: back });
-                                                    setRounded(false);
-                                                    setSymbol('');
-                                                }}
-                                            >
-                                                <div className="flex justify-center gap-2 items-center min-h-[30px]">
-                                                    {vowels.length > 0 ? (
-                                                        vowels.map((v, idx) => (
-                                                            <div key={`${v.symbol}-${idx}`} className="relative group/ph">
-                                                                <span
-                                                                    className="text-lg font-serif"
-                                                                    style={{ color: v.rounded ? 'var(--accent)' : 'var(--primary)' }}
-                                                                    title={`${height} ${back} ${v.rounded ? 'rounded' : 'unrounded'}`}
-                                                                >
-                                                                    {v.symbol}
-                                                                </span>
-                                                                <button
-                                                                    onClick={(e) => { e.stopPropagation(); handleRemovePhoneme(data.vowels.indexOf(v), 'vowel'); }}
-                                                                    className="absolute -top-4 -right-2 hidden group-hover/ph:block text-red-500 hover:text-red-400 bg-neutral-950 rounded-full"
-                                                                >
-                                                                    <X size={10} />
-                                                                </button>
-                                                            </div>
-                                                        ))
-                                                    ) : (
-                                                        <Plus size={12} className="text-[color:var(--text-tertiary)] group-hover:text-[color:var(--text-secondary)] transition-colors" />
-                                                    )}
-                                                </div>
-                                            </td>
-                                        );
-                                    })}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-
-                    <div className="text-center mt-4 text-xs" style={{ color: 'var(--text-tertiary)' }}>
+                <PhonemeGrid
+                    title={t('phonology.vowels')}
+                    icon={<Volume2 size={20} />}
+                    isVowels={true}
+                    getPhonemes={(height, back) => getVowels(height, back)}
+                    onCellClick={(height, backness) => {
+                        setEditingPhoneme({ type: 'vowel', height, backness });
+                        setRounded(false);
+                        setSymbol('');
+                    }}
+                    onRemove={(phoneme) => handleRemovePhoneme(phoneme, 'vowel')}
+                    renderPhoneme={(v) => (
+                        <span
+                            className="text-lg font-serif"
+                            style={{ color: v.rounded ? 'var(--accent)' : 'var(--primary)' }}
+                            title={`${v.height} ${v.backness} ${v.rounded ? 'rounded' : 'unrounded'}`}
+                        >
+                            {v.symbol}
+                        </span>
+                    )}
+                    minWidth={520}
+                    legend={(
                         <div className="flex justify-center gap-4">
                             <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--primary)' }}></span> {t('phonology.unrounded')}</span>
                             <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--accent)' }}></span> {t('phonology.rounded')}</span>
                         </div>
-                    </div>
-
-                    {unclassifiedVowels.length > 0 && (
-                        <div className="mt-4 p-3 rounded border text-sm" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--divider)', color: 'var(--text-secondary)' }}>
-                            <div className="text-xs mb-2" style={{ color: 'var(--text-tertiary)' }}>{t('phonology.unclassified_vowels')}</div>
-                            <div className="flex flex-wrap gap-2 justify-center">
-                                {unclassifiedVowels.map((v, i) => (
-                                    <span key={`unvow-${i}`} className="px-2 py-1 rounded font-serif text-xl" style={{ backgroundColor: 'var(--surface)', color: 'var(--text-primary)', border: '1px solid var(--divider)' }}>{v.symbol}</span>
-                                ))}
-                            </div>
-                        </div>
                     )}
-                </Card>
+                    unclassified={{
+                        items: unclassifiedVowels,
+                        titleKey: 'phonology.unclassified_vowels',
+                        position: 'bottom',
+                        renderItem: (v, i) => (
+                            <span key={`unvow-${i}`} className="px-2 py-1 bg-neutral-800 rounded font-serif text-xl border border-neutral-700" style={{ color: 'var(--text-primary)' }}>
+                                {v.symbol}
+                            </span>
+                        ),
+                    }}
+                />
 
             </div>
 
