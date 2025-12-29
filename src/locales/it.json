@@ -1,24 +1,24 @@
 {
   "app": {
-    "subtitle": "",
-    "title": ""
+    "subtitle": "Lo strumento definitivo per i conlanger",
+    "title": "Korelang"
   },
   "app.subtitle": "Lo strumento definitivo per i conlanger",
   "app.title": "Korelang",
   "common": {
-    "cancel": "",
-    "confirm": "",
-    "copied": "",
-    "delete": "",
-    "save": ""
+    "cancel": "Annulla",
+    "confirm": "Sei sicuro di voler eliminare questo elemento?",
+    "copied": "Copiato!",
+    "delete": "Elimina",
+    "save": "Salva"
   },
   "common.apply": "Applica Modifiche",
   "common.cancel": "Annulla",
   "common.confirm": "Sei sicuro di voler eliminare questo elemento?",
   "common.delete": "Elimina",
   "console": {
-    "ai_failed_no_key": "",
-    "placeholder": ""
+    "ai_failed_no_key": "Comando AI fallito: nessuna chiave API configurata.",
+    "placeholder": "Inserisci il comando qui..."
   },
   "console.ai_applied": "AI applicata: {{count}} parole modificate.",
   "console.ai_applied_count": "AI applicata: {{count}} parole modificate.",
@@ -54,19 +54,19 @@
   "constraints.writing_direction": "Direzione di Scrittura",
   "constraints.writing_system": "Sistema di Scrittura",
   "dashboard": {
-    "by": "",
-    "create_first": "",
-    "default_author": "",
-    "default_project": "",
-    "define_grammar": "",
-    "define_grammar_desc": "",
-    "empty_dict": "",
-    "lexiconsize": "",
-    "manage_lexicon": "",
-    "manage_lexicon_desc": "",
-    "no_data": "",
-    "pos_dist": "",
-    "recent_words": ""
+    "by": "di",
+    "create_first": "Crea la tua prima parola",
+    "default_author": "Autore Sconosciuto",
+    "default_project": "Progetto Senza Titolo",
+    "define_grammar": "Definisci Grammatica",
+    "define_grammar_desc": "Crea le regole sintattiche che governano la tua lingua.",
+    "empty_dict": "Il tuo lessico è vuoto!",
+    "lexiconsize": "Dimensione Lessico",
+    "manage_lexicon": "Gestisci Lessico",
+    "manage_lexicon_desc": "Aggiungi, modifica e organizza le parole nel tuo dizionario.",
+    "no_data": "Nessun dato disponibile.",
+    "pos_dist": "Distribuzione Parti del Discorso",
+    "recent_words": "Parole Recenti"
   },
   "dashboard.by": "di",
   "dashboard.create_first": "Crea la tua prima parola",

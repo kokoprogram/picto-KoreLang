@@ -1,24 +1,24 @@
 {
   "app": {
-    "subtitle": "",
-    "title": ""
+    "subtitle": "语言创作者的终极工具",
+    "title": "Korelang"
   },
   "app.subtitle": "语言创作者的终极工具",
   "app.title": "Korelang",
   "common": {
-    "cancel": "",
-    "confirm": "",
-    "copied": "",
-    "delete": "",
-    "save": ""
+    "cancel": "取消",
+    "confirm": "您确定要删除此项目吗？",
+    "copied": "已复制！",
+    "delete": "删除",
+    "save": "保存"
   },
   "common.apply": "应用更改",
   "common.cancel": "取消",
   "common.confirm": "您确定要删除此项目吗？",
   "common.delete": "删除",
   "console": {
-    "ai_failed_no_key": "",
-    "placeholder": ""
+    "ai_failed_no_key": "AI 命令失败：未配置 API 密钥。",
+    "placeholder": "在此处输入命令..."
   },
   "console.ai_applied": "AI 已应用：修改了 {{count}} 个单词。",
   "console.ai_applied_count": "AI 已应用：修改了 {{count}} 个单词。",
@@ -312,23 +312,23 @@
   "lexicon.word": "单词",
   "lexicon.word_placeholder": "例如：kamra",
   "menu": {
-    "about": "",
-    "console": "",
-    "docs": "",
-    "export_json": "",
-    "file": "",
-    "help": "",
-    "new_project": "",
-    "open_project": "",
-    "preferences": "",
-    "project": "",
-    "settings": "",
-    "toggle_sidebar": "",
-    "tools": "",
-    "validation": "",
-    "view": "",
-    "zoom_in": "",
-    "zoom_out": ""
+    "about": "关于",
+    "console": "控制台",
+    "docs": "文档",
+    "export_json": "导出 JSON",
+    "file": "文件",
+    "help": "帮助",
+    "new_project": "新项目",
+    "open_project": "打开项目",
+    "preferences": "首选项",
+    "project": "项目",
+    "settings": "设置",
+    "toggle_sidebar": "切换侧边栏",
+    "tools": "工具",
+    "validation": "验证",
+    "view": "视图",
+    "zoom_in": "放大",
+    "zoom_out": "缩小"
   },
   "menu.about": "关于",
   "menu.docs": "文档",

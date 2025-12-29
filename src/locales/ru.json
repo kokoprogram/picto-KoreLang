@@ -1,24 +1,24 @@
 {
   "app": {
-    "subtitle": "",
-    "title": ""
+    "subtitle": "Лучший инструмент для конлангеров",
+    "title": "Korelang"
   },
   "app.subtitle": "Лучший инструмент для конлангеров",
   "app.title": "Korelang",
   "common": {
-    "cancel": "",
-    "confirm": "",
-    "copied": "",
-    "delete": "",
-    "save": ""
+    "cancel": "Отмена",
+    "confirm": "Вы уверены, что хотите удалить этот элемент?",
+    "copied": "Скопировано!",
+    "delete": "Удалить",
+    "save": "Сохранить"
   },
   "common.apply": "Применить изменения",
   "common.cancel": "Отмена",
   "common.confirm": "Вы уверены, что хотите удалить этот элемент?",
   "common.delete": "Удалить",
   "console": {
-    "ai_failed_no_key": "",
-    "placeholder": ""
+    "ai_failed_no_key": "Ошибка ИИ: API ключ не настроен.",
+    "placeholder": "Введите команду здесь..."
   },
   "console.ai_applied": "ИИ применён: {{count}} слов изменено.",
   "console.ai_applied_count": "ИИ применён: {{count}} слов изменено.",
@@ -54,19 +54,19 @@
   "constraints.writing_direction": "Направление письма",
   "constraints.writing_system": "Система письма",
   "dashboard": {
-    "by": "",
-    "create_first": "",
-    "default_author": "",
-    "default_project": "",
-    "define_grammar": "",
-    "define_grammar_desc": "",
-    "empty_dict": "",
-    "lexiconsize": "",
-    "manage_lexicon": "",
-    "manage_lexicon_desc": "",
-    "no_data": "",
-    "pos_dist": "",
-    "recent_words": ""
+    "by": "от",
+    "create_first": "Создайте своё первое слово",
+    "default_author": "Неизвестный автор",
+    "default_project": "Безымянный проект",
+    "define_grammar": "Определение Грамматики",
+    "define_grammar_desc": "Создавайте синтаксические правила вашего языка.",
+    "empty_dict": "Ваш лексикон пуст!",
+    "lexiconsize": "Размер Лексикона",
+    "manage_lexicon": "Управление Лексиконом",
+    "manage_lexicon_desc": "Добавляйте, редактируйте и упорядочивайте слова в вашем словаре.",
+    "no_data": "Нет доступных данных.",
+    "pos_dist": "Распределение частей речи",
+    "recent_words": "Недавние слова"
   },
   "dashboard.by": "от",
   "dashboard.create_first": "Создайте своё первое слово",

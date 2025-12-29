@@ -1,24 +1,24 @@
 {
   "app": {
-    "subtitle": "",
-    "title": ""
+    "subtitle": "언어 제작자를 위한 궁극적인 도구",
+    "title": "Korelang"
   },
   "app.subtitle": "언어 제작자를 위한 궁극적인 도구",
   "app.title": "Korelang",
   "common": {
-    "cancel": "",
-    "confirm": "",
-    "copied": "",
-    "delete": "",
-    "save": ""
+    "cancel": "취소",
+    "confirm": "이 항목을 정말 삭제하시겠습니까?",
+    "copied": "복사되었습니다!",
+    "delete": "삭제",
+    "save": "저장"
   },
   "common.apply": "변경 사항 적용",
   "common.cancel": "취소",
   "common.confirm": "이 항목을 정말 삭제하시겠습니까?",
   "common.delete": "삭제",
   "console": {
-    "ai_failed_no_key": "",
-    "placeholder": ""
+    "ai_failed_no_key": "AI 명령 실패: API 키가 설정되지 않음.",
+    "placeholder": "여기에 명령 입력..."
   },
   "console.ai_applied": "AI 적용됨: {{count}}개의 단어가 수정되었습니다.",
   "console.ai_applied_count": "AI 적용됨: {{count}}개의 단어가 수정되었습니다.",
@@ -54,19 +54,19 @@
   "constraints.writing_direction": "쓰기 방향",
   "constraints.writing_system": "문자 체계",
   "dashboard": {
-    "by": "",
-    "create_first": "",
-    "default_author": "",
-    "default_project": "",
-    "define_grammar": "",
-    "define_grammar_desc": "",
-    "empty_dict": "",
-    "lexiconsize": "",
-    "manage_lexicon": "",
-    "manage_lexicon_desc": "",
-    "no_data": "",
-    "pos_dist": "",
-    "recent_words": ""
+    "by": "제작:",
+    "create_first": "첫 단어를 만들어 보세요",
+    "default_author": "알 수 없는 저작자",
+    "default_project": "제목 없는 프로젝트",
+    "define_grammar": "문법 정의",
+    "define_grammar_desc": "언어를 지배하는 통사 규칙을 만듭니다.",
+    "empty_dict": "어휘집이 비어 있습니다!",
+    "lexiconsize": "어휘 규모",
+    "manage_lexicon": "어휘집 관리",
+    "manage_lexicon_desc": "사전의 단어를 추가, 편집 및 정리합니다.",
+    "no_data": "데이터 없음.",
+    "pos_dist": "품사 분포",
+    "recent_words": "최근 단어"
   },
   "dashboard.by": "제작:",
   "dashboard.create_first": "첫 단어를 만들어 보세요",

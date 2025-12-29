@@ -1,24 +1,24 @@
 {
   "app": {
-    "subtitle": "",
-    "title": ""
+    "subtitle": "भाषा निर्माताओं के लिए अंतिम उपकरण",
+    "title": "Korelang"
   },
   "app.subtitle": "भाषा निर्माताओं के लिए अंतिम उपकरण",
   "app.title": "कोरलैंग",
   "common": {
-    "cancel": "",
-    "confirm": "",
-    "copied": "",
-    "delete": "",
-    "save": ""
+    "cancel": "रद्द करें",
+    "confirm": "क्या आप वाकई इस आइटम को हटाना चाहते हैं?",
+    "copied": "कॉपी किया गया!",
+    "delete": "हटाएं",
+    "save": "सहेजें"
   },
   "common.apply": "परिवर्तन लागू करें",
   "common.cancel": "रद्द करें",
   "common.confirm": "क्या आप वाकई इस आइटम को हटाना चाहते हैं?",
   "common.delete": "हटाएं",
   "console": {
-    "ai_failed_no_key": "",
-    "placeholder": ""
+    "ai_failed_no_key": "AI कमांड विफल: कोई API कुंजी कॉन्फ़िगर नहीं की गई।",
+    "placeholder": "यहाँ कमांड दर्ज करें..."
   },
   "console.ai_applied": "AI लागू: {{count}} शब्द संशोधित।",
   "console.ai_applied_count": "AI लागू: {{count}} शब्द संशोधित।",
@@ -54,19 +54,19 @@
   "constraints.writing_direction": "लेखन की दिशा",
   "constraints.writing_system": "लेखन प्रणाली",
   "dashboard": {
-    "by": "",
-    "create_first": "",
-    "default_author": "",
-    "default_project": "",
-    "define_grammar": "",
-    "define_grammar_desc": "",
-    "empty_dict": "",
-    "lexiconsize": "",
-    "manage_lexicon": "",
-    "manage_lexicon_desc": "",
-    "no_data": "",
-    "pos_dist": "",
-    "recent_words": ""
+    "by": "द्वारा",
+    "create_first": "अपना पहला शब्द बनाएं",
+    "default_author": "अज्ञात लेखक",
+    "default_project": "बिना शीर्षक वाली परियोजना",
+    "define_grammar": "व्याकरण परिभाषित करें",
+    "define_grammar_desc": "आपकी भाषा को नियंत्रित करने वाले वाक्यविन्यास नियम बनाएं।",
+    "empty_dict": "आपका शब्दकोश खाली है!",
+    "lexiconsize": "शब्दकोश का आकार",
+    "manage_lexicon": "शब्दकोश प्रबंधित करें",
+    "manage_lexicon_desc": "शब्दकोश में शब्दों को जोड़ें, संपादित करें और व्यवस्थित करें।",
+    "no_data": "कोई डेटा उपलब्ध नहीं है।",
+    "pos_dist": "शब्द भेदों का वितरण",
+    "recent_words": "हाल के शब्द"
   },
   "dashboard.by": "द्वारा",
   "dashboard.create_first": "अपना पहला शब्द बनाएं",

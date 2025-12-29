@@ -1,24 +1,24 @@
 {
   "app": {
-    "subtitle": "",
-    "title": ""
+    "subtitle": "A ferramenta definitiva para conlangers",
+    "title": "Korelang"
   },
   "app.subtitle": "A ferramenta definitiva para conlangers",
   "app.title": "Korelang",
   "common": {
-    "cancel": "",
-    "confirm": "",
-    "copied": "",
-    "delete": "",
-    "save": ""
+    "cancel": "Cancelar",
+    "confirm": "Tem certeza de que deseja excluir este item?",
+    "copied": "Copiado!",
+    "delete": "Excluir",
+    "save": "Salvar"
   },
   "common.apply": "Aplicar Alterações",
   "common.cancel": "Cancelar",
   "common.confirm": "Tem certeza de que deseja excluir este item?",
   "common.delete": "Excluir",
   "console": {
-    "ai_failed_no_key": "",
-    "placeholder": ""
+    "ai_failed_no_key": "Comando de IA falhou: Nenhuma Chave de API configurada.",
+    "placeholder": "Digite o comando aqui..."
   },
   "console.ai_applied": "IA aplicada: {{count}} palavras modificadas.",
   "console.ai_applied_count": "IA aplicada: {{count}} palavras modificadas.",
@@ -54,19 +54,19 @@
   "constraints.writing_direction": "Direção da Escrita",
   "constraints.writing_system": "Sistema de Escrita",
   "dashboard": {
-    "by": "",
-    "create_first": "",
-    "default_author": "",
-    "default_project": "",
-    "define_grammar": "",
-    "define_grammar_desc": "",
-    "empty_dict": "",
-    "lexiconsize": "",
-    "manage_lexicon": "",
-    "manage_lexicon_desc": "",
-    "no_data": "",
-    "pos_dist": "",
-    "recent_words": ""
+    "by": "por",
+    "create_first": "Crie sua primeira palavra",
+    "default_author": "Autor desconhecido",
+    "default_project": "Projeto sem título",
+    "define_grammar": "Definir Gramática",
+    "define_grammar_desc": "Crie as regras sintáticas que governam sua língua.",
+    "empty_dict": "Seu léxico está vazio!",
+    "lexiconsize": "Tamanho do Léxico",
+    "manage_lexicon": "Gerenciar Léxico",
+    "manage_lexicon_desc": "Adicione, edite e organize palavras no seu dicionário.",
+    "no_data": "Nenhum dado disponível.",
+    "pos_dist": "Distribuição de Classes Gramaticais",
+    "recent_words": "Palavras Recentes"
   },
   "dashboard.by": "por",
   "dashboard.create_first": "Crie sua primeira palavra",

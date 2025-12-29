@@ -1,24 +1,24 @@
 {
   "app": {
-    "subtitle": "",
-    "title": ""
+    "subtitle": "Dil yaratıcıları için nihai araç",
+    "title": "Korelang"
   },
   "app.subtitle": "Dil yaratıcıları için nihai araç",
   "app.title": "Korelang",
   "common": {
-    "cancel": "",
-    "confirm": "",
-    "copied": "",
-    "delete": "",
-    "save": ""
+    "cancel": "İptal",
+    "confirm": "Bu öğeyi silmek istediğinizden emin misiniz?",
+    "copied": "Kopyalandı!",
+    "delete": "Sil",
+    "save": "Kaydet"
   },
   "common.apply": "Değişiklikleri Uygula",
   "common.cancel": "İptal",
   "common.confirm": "Bu öğeyi silmek istediğinizden emin misiniz?",
   "common.delete": "Sil",
   "console": {
-    "ai_failed_no_key": "",
-    "placeholder": ""
+    "ai_failed_no_key": "AI komutu başarısız: API anahtarı ayarlanmadı.",
+    "placeholder": "Komutu buraya girin..."
   },
   "console.ai_applied": "AI Uygulandı: {{count}} kelime değiştirildi.",
   "console.ai_applied_count": "AI Uygulandı: {{count}} kelime değiştirildi.",
@@ -54,19 +54,19 @@
   "constraints.writing_direction": "Yazım Yönü",
   "constraints.writing_system": "Yazı Sistemi",
   "dashboard": {
-    "by": "",
-    "create_first": "",
-    "default_author": "",
-    "default_project": "",
-    "define_grammar": "",
-    "define_grammar_desc": "",
-    "empty_dict": "",
-    "lexiconsize": "",
-    "manage_lexicon": "",
-    "manage_lexicon_desc": "",
-    "no_data": "",
-    "pos_dist": "",
-    "recent_words": ""
+    "by": "yazan",
+    "create_first": "İlk kelimenizi oluşturun",
+    "default_author": "Bilinmeyen Yazar",
+    "default_project": "İsimsiz Proje",
+    "define_grammar": "Dilbilgisini Tanımla",
+    "define_grammar_desc": "Dilinizi yöneten sözdizimi kurallarını oluşturun.",
+    "empty_dict": "Sözlüğünüz boş!",
+    "lexiconsize": "Sözlük Boyutu",
+    "manage_lexicon": "Sözlüğü Yönet",
+    "manage_lexicon_desc": "Sözlükteki kelimeleri ekleyin, düzenleyin ve düzenleyin.",
+    "no_data": "Veri yok.",
+    "pos_dist": "Sözcük Türü Dağılımı",
+    "recent_words": "Son Kelimeler"
   },
   "dashboard.by": "yazan",
   "dashboard.create_first": "İlk kelimenizi oluşturun",
