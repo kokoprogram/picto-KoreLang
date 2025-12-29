@@ -482,7 +482,16 @@ const Lexicon: React.FC<LexiconProps> = ({
                                 <h3 className="font-serif text-2xl font-bold text-neutral-100">{entry.word}</h3>
                             )}
 
-                            <span className="text-neutral-300 font-mono text-sm px-2 py-0.5 rounded" style={{ backgroundColor: 'var(--border)' }}>/{entry.ipa}/</span>
+                                                        <span
+                                                            className="font-mono text-sm px-2 py-0.5 rounded border"
+                                                            style={{
+                                                                backgroundColor: 'rgb(from var(--surface) r g b / 0.9)',
+                                                                borderColor: 'var(--divider)',
+                                                                color: 'var(--text-secondary)'
+                                                            }}
+                                                        >
+                                                            /{entry.ipa}/
+                                                        </span>
                             <span className="font-sans text-blue-400 text-xs uppercase font-bold tracking-wider border border-blue-900 bg-blue-950/30 px-1.5 rounded">{getPosLabel(entry.pos)}</span>
                             {isInvalid && (
                                 <div className="relative group/badge">
