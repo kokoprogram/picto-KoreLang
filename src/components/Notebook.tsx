@@ -38,7 +38,7 @@ const Notebook: React.FC<NotebookProps> = ({ scriptConfig, isScriptMode, text, s
                         onChange={setFontSize}
                         min={12}
                         max={128}
-                        className="w-24"
+                        className="w-24 h-1"
                     />
                     <span className="text-[10px] font-mono w-8 text-center" style={{ color: 'var(--text-secondary)' }}>{fontSize}px</span>
                 </div>
