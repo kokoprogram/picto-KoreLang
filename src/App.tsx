@@ -33,11 +33,39 @@ const AppContent: React.FC = () => {
   const registerCommands = useCommandRegister();
 
   const [isConsoleOpen, setIsConsoleOpen] = useState(false);
-  const [isScriptMode, setIsScriptMode] = useState(false);
-  const [zoomLevel, setZoomLevel] = useState(80);
+  const [isScriptMode, setIsScriptMode] = useState<boolean>(() => {
+    const saved = localStorage.getItem("korelang_script_mode");
+    return saved === "true";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("korelang_script_mode", isScriptMode.toString());
+  }, [isScriptMode]);
+  const [zoomLevel, setZoomLevel] = useState<number>(() => {
+    const saved = localStorage.getItem("korelang_ui_zoom");
+    return saved ? parseInt(saved) : 80;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("korelang_ui_zoom", zoomLevel.toString());
+  }, [zoomLevel]);
+
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'korelang_ui_zoom' && e.newValue) {
+        setZoomLevel(parseInt(e.newValue));
+      }
+      if (e.key === 'korelang_script_mode' && e.newValue) {
+        setIsScriptMode(e.newValue === "true");
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
   const sidebarRef = React.useRef<SidebarHandle>(null);
 
   useEffect(() => {
+    console.log("%c KoreLang v1.3.0 initialized ", "background: #222; color: #bada55; font-size: 14px; font-weight: bold; border-radius: 4px; padding: 2px 6px;");
     registerCommands({
       toggleSidebar: () => sidebarRef.current?.toggle(),
       openSidebar: () => sidebarRef.current?.open(),

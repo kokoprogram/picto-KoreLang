@@ -10,6 +10,10 @@ interface ViewLayoutProps {
     headerChildren?: ReactNode; // Extra widgets/buttons in header
     children: ReactNode; // Main content
     footer?: ReactNode; // Optional footer content
+    noScroll?: boolean; // Disable internal layout scrolling
+    height?: string;
+    headerBgColor?: string;
+    hideTitle?: boolean;
 }
 
 /**
@@ -26,30 +30,37 @@ interface ViewLayoutProps {
  *   Your content here
  * </ViewLayout>
  */
-export const ViewLayout: React.FC<ViewLayoutProps> = ({ 
-    icon, 
-    title, 
-    subtitle, 
+export const ViewLayout: React.FC<ViewLayoutProps> = ({
+    icon,
+    title,
+    subtitle,
     titleContent,
     headerChildren,
     children,
-    footer
+    footer,
+    noScroll = false,
+    height,
+    headerBgColor,
+    hideTitle
 }) => {
     return (
         <div className="h-full flex flex-col" style={{ backgroundColor: 'var(--background)' }}>
-            <ViewHeader 
-                icon={icon} 
-                title={title} 
+            <ViewHeader
+                icon={icon}
+                title={title}
                 subtitle={subtitle}
                 titleContent={titleContent}
+                height={height}
+                bgColor={headerBgColor}
+                hideTitle={hideTitle}
             >
                 {headerChildren}
             </ViewHeader>
-            
-            <div className="flex-1 overflow-y-auto custom-scrollbar">
+
+            <div className={`flex-1 ${noScroll ? 'overflow-hidden flex flex-col' : 'overflow-y-auto custom-scrollbar'}`}>
                 {children}
             </div>
-            
+
             {footer && (
                 <div className="border-t px-6 py-3" style={{ borderColor: 'var(--border)' }}>
                     {footer}

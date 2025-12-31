@@ -112,7 +112,7 @@ export const useProject = () => {
     if (!isInitialLoadComplete) return;
 
     const projectData: ProjectData = {
-      version: "1.1",
+      version: "1.3",
       name: projectName,
       author: projectAuthor,
       description: projectDescription,
@@ -147,7 +147,7 @@ export const useProject = () => {
   ]);
 
   const getFullProjectData = (): ProjectData => ({
-    version: "1.1",
+    version: "1.3",
     name: projectName,
     author: projectAuthor,
     description: projectDescription,

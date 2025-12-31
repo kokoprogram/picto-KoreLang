@@ -354,7 +354,7 @@ const ConsoleConfig: React.FC<ConsoleConfigProps> = ({ loadingAI, author = "user
     }
 
     if (cmd === "about") {
-      addLog("output", "KoreLang Console v1.2 - Standardized command shell.");
+      addLog("output", "KoreLang Console v1.3 - Standardized command shell.");
       return;
     }
 

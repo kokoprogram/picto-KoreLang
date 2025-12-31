@@ -388,8 +388,17 @@ export const generateWords = async (
         }
 
         if (phonology) {
-            const cons = phonology.consonants.map(p => p.phoneme.symbol).join(', ');
-            const vows = phonology.vowels.map(p => p.phoneme.symbol).join(', ');
+            // Robust extraction of symbols from PhonemeInstance/PhonemeModel
+            const getSafeSymbol = (p: any) => {
+                if (!p) return '';
+                // Try PhonemeInstance structure: p.phoneme.symbol
+                if (p.phoneme && typeof p.phoneme === 'object') return p.phoneme.symbol || '';
+                // Fallback to direct symbol property (legacy or malformed)
+                return p.symbol || '';
+            };
+
+            const cons = phonology.consonants.map(getSafeSymbol).filter(Boolean).join(', ');
+            const vows = phonology.vowels.map(getSafeSymbol).filter(Boolean).join(', ');
             const syl = phonology.syllableStructure || 'Free';
             globalRulesPrompt += `\nPHONOLOGY RULES:
             - Consonants available: ${cons}

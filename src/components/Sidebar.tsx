@@ -40,12 +40,12 @@ const Sidebar = forwardRef<SidebarHandle, SidebarProps>(
 
     const authoringItems = [
       { id: "DASHBOARD", label: t("nav.dashboard"), icon: LayoutDashboard },
-      { id: "PHONOLOGY", label: t("nav.phonology"), icon: Activity },
-      { id: "SCRIPT", label: t("nav.script"), icon: Feather },
       { id: "LEXICON", label: t("nav.lexicon"), icon: BookA },
+      { id: "SCRIPT", label: t("nav.script"), icon: Feather },
+      { id: "NOTEBOOK", label: t("nav.notebook"), icon: BookOpen },
+      { id: "PHONOLOGY", label: t("nav.phonology"), icon: Activity },
       { id: "GRAMMAR", label: t("nav.grammar"), icon: Languages },
       { id: "GENEVOLVE", label: t("nav.genevolve"), icon: GitBranch },
-      { id: "NOTEBOOK", label: t("nav.notebook"), icon: BookOpen },
     ];
 
     const renderItem = (item: any) => {
@@ -57,10 +57,9 @@ const Sidebar = forwardRef<SidebarHandle, SidebarProps>(
           <button
             onClick={() => setView(item.id as ViewState)}
             className={`flex items-center rounded-sm text-sm font-medium transition-all w-full
-              ${
-                isActive
-                  ? "text-white"
-                  : "text-neutral-400 hover:text-neutral-100"
+              ${isActive
+                ? "text-white"
+                : "text-neutral-400 hover:text-neutral-100"
               }`}
             style={{
               backgroundColor: isActive ? 'var(--elevated)' : undefined,
@@ -99,7 +98,7 @@ const Sidebar = forwardRef<SidebarHandle, SidebarProps>(
               <p className="text-[10px] text-neutral-500 mt-1 uppercase tracking-wider font-semibold ms-7 flex items-center gap-2">
                 {t("app.subtitle")}
                 <span className="text-[11px] bg-neutral-800 text-neutral-400 px-1.5 py-0.5 rounded border border-neutral-700 lowercase font-mono">
-                  v1.2
+                  v1.3
                 </span>
               </p>
             </div>

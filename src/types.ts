@@ -301,7 +301,7 @@ export interface ScriptGlyph {
 
 export interface ScriptConfig {
   name: string;
-  direction: 'ltr' | 'rtl' | 'ttb';
+  direction: 'ltr' | 'rtl' | 'ttb' | 'ttb-ltr';
   glyphs: ScriptGlyph[];
   fontFamily?: string;
   fontData?: string;

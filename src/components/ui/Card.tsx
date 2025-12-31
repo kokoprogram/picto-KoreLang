@@ -5,6 +5,7 @@ interface CardProps {
   className?: string;
   variant?: 'elevated' | 'surface';
   onClick?: () => void;
+  onWheel?: (e: React.WheelEvent) => void;
 }
 
 /**
@@ -13,11 +14,12 @@ interface CardProps {
  * - Bords arrondis
  * - Variantes elevated/surface
  */
-export const Card: React.FC<CardProps> = ({ 
-  children, 
+export const Card: React.FC<CardProps> = ({
+  children,
   className = '',
   variant = 'elevated',
-  onClick
+  onClick,
+  onWheel
 }) => {
   const baseClasses = 'rounded-xl border';
   const elevatedStyle = {
@@ -32,10 +34,11 @@ export const Card: React.FC<CardProps> = ({
   const style = variant === 'elevated' ? elevatedStyle : surfaceStyle;
 
   return (
-    <div 
+    <div
       className={`${baseClasses} ${className}`}
       style={style}
       onClick={onClick}
+      onWheel={onWheel}
     >
       {children}
     </div>

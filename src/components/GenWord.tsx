@@ -27,8 +27,14 @@ interface GenWordProps {
 const GenWord: React.FC<GenWordProps> = ({ onAddWords, onEditEntry, initialState, saveState, projectConstraints, scriptConfig, isScriptMode = false, phonology }) => {
   const { t } = useTranslation();
 
-  // Use state lifted from parent
-  const { generated, constraints, vibe, count } = initialState || { generated: [], constraints: '', vibe: '', count: 5 };
+  // Use state lifted from parent with robust defaults
+  const {
+    generated: rawGenerated = [],
+    constraints = '',
+    vibe = '',
+    count = 5
+  } = initialState || {};
+  const generated = rawGenerated || [];
 
   const [loading, setLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
