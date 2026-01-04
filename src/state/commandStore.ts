@@ -32,6 +32,7 @@ export type CommandPayload = {
   language?: string;
   aiEnabled?: boolean;
   apiKey?: string;
+  provider?: import("../services/aiProviderFactory").AIProvider;
   theme?: "dark" | "cappuccino" | "tokyo-night" | "custom";
   customTheme?: Record<string, string>;
   colorKey?: string;

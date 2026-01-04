@@ -1,33 +1,11 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { LexiconEntry, ProjectConstraints, MorphologyState, PhonologyConfig, SoundChangeRule } from "../types";
+import { getAIClient, getApiKey, isApiKeySet, setApiKey } from "./aiProviderFactory";
 
-const STORAGE_KEY = 'user_gemini_api_key';
+export { getApiKey, setApiKey, isApiKeySet } from "./aiProviderFactory";
 
-export const getApiKey = () => {
-    const key = localStorage.getItem(STORAGE_KEY) || (import.meta.env.VITE_GEMINI_API_KEY as string) || "";
-    // Aggressively trim whitespace and any accidental quotes
-    return key.trim().replace(/^["']|["']$/g, '');
-};
-
-export const setApiKey = (key: string) => {
-    localStorage.setItem(STORAGE_KEY, key);
-};
-
-export const isApiKeySet = () => !!getApiKey();
-
-const getGenAI = () => {
-    let key = getApiKey();
-    if (!key) throw new Error("API Key not configured. Please set it in Settings.");
-
-    // Debug log to check if key is a placeholder
-    if (key === "PLACEHOLDER_API_KEY") {
-        console.warn("WARNING: Using PLACEHOLDER_API_KEY. This will likely fail.");
-    } else {
-        console.log(`Using API Key starting with: ${key.substring(0, 4)}... (Length: ${key.length})`);
-    }
-
-    // Ensure the key is trimmed before being used by the SDK
-    return new GoogleGenerativeAI(key.trim());
+const getModel = (modelName: string) => {
+    const client = getAIClient();
+    return client.getGenerativeModel({ model: modelName });
 };
 
 /**
@@ -317,12 +295,7 @@ export const repairLexicon = async (
     - Structure: ${constraints.phonotacticStructure || 'Free'}
     `;
     try {
-        // Initialize client with the API key from environment variables
-        const genAI = getGenAI();
-        const model = genAI.getGenerativeModel({
-            model: "gemma-3-27b-it",
-
-        });
+        const model = getModel("gemma-3-27b-it");
 
         for (let i = 0; i < invalidEntries.length; i += CHUNK_SIZE) {
             const chunk = invalidEntries.slice(i, i + CHUNK_SIZE);
@@ -353,8 +326,7 @@ export const repairLexicon = async (
 
 export const suggestIPA = async (word: string, phonologyDescription: string): Promise<string> => {
     try {
-        const genAI = getGenAI();
-        const model = genAI.getGenerativeModel({ model: "gemma-3-27b-it" });
+        const model = getModel("gemma-3-27b-it");
         console.log("Iniciando generación con el modelo gemma-3-27b-it...");
         const result = await model.generateContent("Given the following phonological rules/description: \"" + phonologyDescription + "\", provide the most likely IPA transcription for the word \"" + word + "\". Return ONLY the IPA string, enclosed in forward slashes.");
         const response = await result.response;
@@ -373,10 +345,7 @@ export const generateWords = async (
     phonology?: PhonologyConfig
 ): Promise<Array<{ word: string; ipa: string }>> => {
     try {
-        const genAI = getGenAI();
-        const model = genAI.getGenerativeModel({
-            model: "gemma-3-27b-it",
-        });
+        const model = getModel("gemma-3-27b-it");
         const safeCount = Math.min(count, 15);
         let globalRulesPrompt = "";
 
@@ -433,11 +402,7 @@ export const evolveWords = async (
     const evolvedLexicon: LexiconEntry[] = [...words];
 
     try {
-        const genAI = getGenAI();
-        const model = genAI.getGenerativeModel({
-            model: "gemma-3-27b-it",
-
-        });
+        const model = getModel("gemma-3-27b-it");
 
         for (let i = 0; i < words.length; i += CHUNK_SIZE) {
             const chunk = words.slice(i, i + CHUNK_SIZE);
@@ -471,11 +436,7 @@ export const processCommandAI = async (
 ): Promise<{ success: boolean; modifiedCount: number; newLexicon?: LexiconEntry[]; message?: string }> => {
     if (lexicon.length === 0) return { success: false, modifiedCount: 0 };
     try {
-        const genAI = getGenAI();
-        const model = genAI.getGenerativeModel({
-            model: "gemma-3-27b-it",
-
-        });
+        const model = getModel("gemma-3-27b-it");
 
         console.log("Iniciando generación con el modelo gemma-3-27b-it...");
         const result = await model.generateContent("Apply bulk changes to lexicon. Instruction: \"" + instruction + "\". Constraints: " + constraints.allowedGraphemes + ". Return JSON object with \"modifications\" array containing objects with \"id\" and changed fields.");
@@ -495,8 +456,7 @@ export const processCommandAI = async (
 
 export const analyzeSyntax = async (sentence: string, grammarRules: string, morphology?: MorphologyState): Promise<string> => {
     try {
-        const genAI = getGenAI();
-        const model = genAI.getGenerativeModel({ model: "gemma-3-27b-it" });
+        const model = getModel("gemma-3-27b-it");
         console.log("Iniciando generación con el modelo gemma-3-27b-it...");
         const result = await model.generateContent("Analyze sentence \"" + sentence + "\" using Grammar: " + grammarRules + ". Morphology: " + JSON.stringify(morphology) + ". Provide gloss and AST.");
         const response = await result.response;
@@ -509,14 +469,10 @@ export const analyzeSyntax = async (sentence: string, grammarRules: string, morp
 
 export const generatePhonology = async (description: string): Promise<PhonologyConfig> => {
     try {
-        const genAI = getGenAI();
-        const model = genAI.getGenerativeModel({
-            model: "gemma-3-27b-it",
-
-        });
+        const model = getModel("gemma-3-27b-it");
 
         console.log("Iniciando generación con el modelo gemma-3-27b-it...");
-        const result = await model.generateContent(`Create a structured phonology from this description: "${description}". 
+        const result = await model.generateContent(`Create a structured phonology from this description: "${description}".
         
         Your response MUST be a single raw JSON object (no markdown, no backticks) that matches this interface:
         {

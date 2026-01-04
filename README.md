@@ -20,10 +20,17 @@ npm install
 
 ### 3. Environment Configuration
 
-Create a `.env` file in the root directory (or use `.env.local`) and add your Google Gemini API Key:
+Create a `.env` file in the root directory (or use `.env.local`) and add your preferred AI provider keys. Gemini remains the default provider, but you can switch to OpenRouter in **Settings → General**.
 
 ```env
-GEMINI_API_KEY=your_api_key_here
+VITE_GEMINI_API_KEY=your_gemini_key_here
+# Optional OpenRouter support
+VITE_OPENROUTER_API_KEY=your_openrouter_key_here
+VITE_OPENROUTER_ENDPOINT=https://openrouter.ai/api/v1/chat/completions
+VITE_OPENROUTER_MODEL=google/gemma-2-9b-it
+# Used for the Referer/X-Title headers required by OpenRouter
+VITE_APP_URL=http://localhost:3000
+VITE_APP_NAME=KoreLang
 ```
 
 ### 4. Development
