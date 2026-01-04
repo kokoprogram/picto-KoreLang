@@ -7,6 +7,7 @@ import { ConScriptText } from './ConScriptRenderer';
 import { useTranslation } from '../i18n';
 import { searchLexicon, SearchResult } from '../services/searchService';
 import { isApiKeySet } from '../services/geminiService';
+import { getCurrentProvider } from '../services/aiProviderFactory';
 import { ViewLayout, CompactButton, StatBadge } from './ui';
 import LexiconLetterIndicator from './LexiconLetterIndicator';
 
@@ -41,6 +42,7 @@ const Lexicon: React.FC<LexiconProps> = ({
     draftEntry, setDraftEntry, scriptConfig, isScriptMode = false
 }) => {
     const { t, i18n: i18nInstance } = useTranslation();
+    const providerLabel = getCurrentProvider() === 'openrouter' ? 'OpenRouter' : 'Gemini';
     const direction = i18nInstance.dir();
     const [activeTab, setActiveTab] = useState<'BROWSE' | 'GENERATE'>('BROWSE');
     const [searchTerm, setSearchTerm] = useState('');
@@ -633,7 +635,7 @@ const Lexicon: React.FC<LexiconProps> = ({
             {!isApiKeySet() && (
                 <div className="items-center flex-1 hidden gap-3 p-2 text-xs border rounded-lg md:flex bg-amber-950/20 border-amber-900/50 text-amber-200">
                     <ShieldAlert size={14} className="shrink-0 text-amber-500" />
-                    <p>{t('lexicon.ai_requires_key') || 'AI Generation requires an API Key.'} <a href="https://github.com/zRinexD/KoreLang/" target="_blank" rel="noopener noreferrer" className="font-bold underline">{t('lexicon.docs') || 'Documentation'}</a>.</p>
+                    <p>{t('lexicon.ai_requires_key') || `AI Generation requires a ${providerLabel} API Key.`} <a href="https://github.com/zRinexD/KoreLang/" target="_blank" rel="noopener noreferrer" className="font-bold underline">{t('lexicon.docs') || 'Documentation'}</a>.</p>
                 </div>
             )}
             <button

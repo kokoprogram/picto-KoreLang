@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { X, Moon, Sun, Cpu, Palette, Download, Upload, Check, Eye, EyeOff, HelpCircle, ExternalLink, ChevronLeft, ChevronDown } from 'lucide-react';
+import { X, Moon, Sun, Cpu, Palette, Download, Upload, Check, Eye, EyeOff, HelpCircle, ExternalLink, ChevronLeft, ChevronDown, ShieldAlert } from 'lucide-react';
 import { useTranslation, languages } from '../i18n';
 import { useUI } from '../ui/UIContext';
 import { AppSettings } from '../types';
 import { DEFAULT_CUSTOM } from '../constants';
-import { isApiKeySet, getApiKey } from '../services/geminiService';
+import { AIProvider, getApiKey, isApiKeySet, setApiKey, setCurrentProvider } from '../services/aiProviderFactory';
 import { useCommandExecutor } from '../state/commandStore';
 import { Card, Section, CompactButton, ToggleButton, FormField, Modal } from './ui';
 
@@ -189,16 +189,24 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ settings, updateSettings 
   const { t, i18n } = useTranslation();
   const executeCommand = useCommandExecutor();
   const [activeTab, setActiveTab] = useState<'GENERAL' | 'THEME'>('GENERAL');
-  const [apiKey, setApiKeyLocal] = useState(getApiKey());
+  const initialProvider = (settings.aiProvider as AIProvider) || 'gemini';
+  const [selectedProvider, setSelectedProvider] = useState<AIProvider>(initialProvider);
+  const [apiKey, setApiKeyLocal] = useState(getApiKey(initialProvider));
   const [showApiKey, setShowApiKey] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [currentTheme, setCurrentTheme] = useState<string>(settings.theme);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const hasApiKey = isApiKeySet();
+  const hasApiKey = isApiKeySet(selectedProvider);
 
   useEffect(() => {
     setCurrentTheme(settings.theme);
   }, [settings.theme]);
+
+  useEffect(() => {
+    const provider = (settings.aiProvider as AIProvider) || 'gemini';
+    setSelectedProvider(provider);
+    setApiKeyLocal(getApiKey(provider));
+  }, [settings.aiProvider]);
 
   const setLanguage = (lang: string) => executeCommand('setLanguage', { language: lang });
 
@@ -244,7 +252,16 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ settings, updateSettings 
 
   const handleApiKeyChange = (val: string) => {
     setApiKeyLocal(val);
-    executeCommand('setApiKey', { apiKey: val });
+    executeCommand('setApiKey', { apiKey: val, provider: selectedProvider });
+  };
+
+  const handleProviderChange = (provider: AIProvider) => {
+    setSelectedProvider(provider);
+    setCurrentProvider(provider);
+    updateSettings({ ...settings, aiProvider: provider });
+    const storedKey = getApiKey(provider);
+    setApiKeyLocal(storedKey);
+    setApiKey(storedKey, provider);
   };
 
   return (
@@ -284,6 +301,28 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ settings, updateSettings 
                 <input type="checkbox" checked={settings.enableAI} onChange={(e) => executeCommand('setAIEnabled', { aiEnabled: e.target.checked })} className="w-5 h-5 rounded" />
               </div>
 
+              {/* Provider selection */}
+              <FormField label={t('settings.ai_provider') || 'AI Provider'}>
+                <div className="grid grid-cols-2 gap-2">
+                  {[{ id: 'gemini', label: 'Gemini' }, { id: 'openrouter', label: 'OpenRouter' }].map((provider) => (
+                    <CompactButton
+                      key={provider.id}
+                      onClick={() => handleProviderChange(provider.id as AIProvider)}
+                      variant={selectedProvider === provider.id ? 'solid' : 'ghost'}
+                      color="var(--accent)"
+                      icon={null}
+                      label={provider.label}
+                      className="justify-center text-xs"
+                    />
+                  ))}
+                </div>
+                <p className="mt-2 text-[11px]" style={{ color: 'var(--text-secondary)' }}>
+                  {selectedProvider === 'openrouter'
+                    ? 'OpenRouter requires an API key and Referer/Title headers.'
+                    : 'Gemini will be used by default if no provider is selected.'}
+                </p>
+              </FormField>
+
               {/* API key */}
               <FormField label={t('settings.api_key')}>
                 <div className="relative">
@@ -293,7 +332,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ settings, updateSettings 
                     onChange={(e) => handleApiKeyChange(e.target.value)}
                     className="w-full px-3 py-2 pr-10 text-sm transition-colors border rounded outline-none focus:ring-1"
                     style={{ backgroundColor: 'var(--inputfield)', borderColor: 'var(--border)', color: 'var(--text-primary)', caretColor: 'var(--accent)' }}
-                    placeholder={t('settings.api_key_ph')}
+                    placeholder={selectedProvider === 'openrouter' ? 'OPENROUTER_API_KEY' : t('settings.api_key_ph')}
                   />
                   <CompactButton
                     onClick={() => setShowApiKey(!showApiKey)}
@@ -304,6 +343,16 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ settings, updateSettings 
                     className="absolute -translate-y-1/2 right-1.5 top-1/2"
                   />
                 </div>
+                {!hasApiKey && (
+                  <div className="flex items-start gap-2 p-2 mt-2 text-xs border rounded" style={{ borderColor: 'var(--border)', backgroundColor: 'rgb(from var(--accent) r g b / 0.08)' }}>
+                    <ShieldAlert size={14} className="shrink-0" style={{ color: 'var(--accent)' }} />
+                    <span style={{ color: 'var(--text-primary)' }}>
+                      {selectedProvider === 'openrouter'
+                        ? 'Enter your OpenRouter API key to enable AI features.'
+                        : 'Enter your Gemini API key to enable AI features.'}
+                    </span>
+                  </div>
+                )}
               </FormField>
 
               {/* Language */}

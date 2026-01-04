@@ -400,6 +400,7 @@ export interface AppSettings {
   showLineNumbers: boolean;
   enableAI: boolean;
   language?: string;
+  aiProvider?: 'gemini' | 'openrouter';
 }
 
 export interface ProjectData {

@@ -9,7 +9,8 @@ export const useSettings = () => {
     const saved = localStorage.getItem(SETTINGS_STORAGE_KEY);
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        return { aiProvider: 'gemini', ...parsed } as AppSettings;
       } catch {}
     }
     return {
@@ -19,6 +20,7 @@ export const useSettings = () => {
       enableAI: true,
       language: 'en',
       customTheme: DEFAULT_CUSTOM,
+      aiProvider: 'gemini',
     };
   });
 

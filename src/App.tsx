@@ -21,6 +21,7 @@ import {
   resolveModal,
 } from "./state/commandStore";
 import { setApiKey as persistApiKey } from "./services/geminiService";
+import { setCurrentProvider } from "./services/aiProviderFactory";
 
 
 
@@ -114,7 +115,10 @@ const AppContent: React.FC = () => {
         });
       },
       setApiKey: (payload) => {
-        persistApiKey(payload?.apiKey || "");
+        if (payload?.provider) {
+          setCurrentProvider(payload.provider);
+        }
+        persistApiKey(payload?.apiKey || "", payload?.provider);
       },
       setTheme: (payload) => {
         if (!payload?.theme) return;

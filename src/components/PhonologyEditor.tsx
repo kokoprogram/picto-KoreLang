@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import { Wand2, RefreshCw, Volume2, Info, LayoutGrid, EyeOff, ShieldAlert, Plus, Trash2, X, Check, Eye, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react';
-import { generatePhonology, isApiKeySet } from '../services/geminiService';
 import { PhonologyConfig, PhonemeInstance, PhonemeModel } from '../types';
 
 import { useTranslation } from '../i18n';
