@@ -1,6 +1,6 @@
-# KoreLang
+# picto-KoreLang
 
-A professional Integrated Development Environment (IDE) for constructed languages.
+A more casual Integrated Development Environment (IDE) for constructed languages forked from the original [KoreLang(https://github.com/zRinexD/KoreLang)].
 
 ## 🚀 Quick Start
 
